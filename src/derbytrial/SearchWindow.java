@@ -54,9 +54,9 @@ public class SearchWindow extends javax.swing.JFrame {
         typeToColNames.put("Artists", new String[]{"ID", "Name", "Songs", "Albums"});
         typeToColNames.put("Albums", new String[]{"ID", "Name", "Artist", "Songs", "Release Date"});
         typeToColNames.put("Songs", new String[]{"ID", "Name", "Artist Name", "Album Name"});
-        typeToColNames.put("Stock", new String[]{"Stock ID", "Album ID", "Album", "Artist", "Format", "Price", "In Stock", "On Order", "Vendor Price"});
+        typeToColNames.put("Stock", new String[]{"Stock ID", "Album ID", "Album Name", "Artist", "Format", "Price", "In Stock", "On Order", "Vendor ID","Vendor Price"});
         typeToColNames.put("Vendors", new String[]{"ID", "Name", "Contact", "Phone", "Items Carried", "Address", "State", "Zip"});
-        typeToColNames.put("Customers", new String[]{"Name", "Orders", "Total Revenue", "Phone", "Address", "City", "State", "Zip"});
+        typeToColNames.put("Customers", new String[]{"ID", "Name", "Orders", "Total Revenue", "Phone", "Address", "City", "State", "Zip"});
 
         nameModMap = new HashMap<>();
         nameModMap.put("Stock", "ALBUM_");
@@ -65,9 +65,9 @@ public class SearchWindow extends javax.swing.JFrame {
         typeToIsNumeric.put("Artists", new Boolean[]{true, false, true, true});
         typeToIsNumeric.put("Albums", new Boolean[]{true, false, false, true, false});
         typeToIsNumeric.put("Songs", new Boolean[]{true, false, false, false});
-        typeToIsNumeric.put("Stock", new Boolean[]{true, true, false, false, false, true, true, true, true});
+        typeToIsNumeric.put("Stock", new Boolean[]{true, true, false, false, false, true, true, true, true, true});
         typeToIsNumeric.put("Vendors", new Boolean[]{true, false, false, false, true, false, false, true});
-        typeToIsNumeric.put("Customers", new Boolean[]{false, true, true, false, false, false, false, true});
+        typeToIsNumeric.put("Customers", new Boolean[]{true, false, true, true, false, false, false, false, true});
 
     }
 
