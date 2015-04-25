@@ -1,0 +1,834 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
+  <NonVisualComponents>
+    <Component class="javax.swing.JButton" name="jButton1">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="jButton1"/>
+      </Properties>
+    </Component>
+  </NonVisualComponents>
+  <Properties>
+    <Property name="defaultCloseOperation" type="int" value="2"/>
+  </Properties>
+  <SyntheticProperties>
+    <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
+    <SyntheticProperty name="generateCenter" type="boolean" value="false"/>
+  </SyntheticProperties>
+  <Events>
+    <EventHandler event="windowClosed" listener="java.awt.event.WindowListener" parameters="java.awt.event.WindowEvent" handler="formWindowClosed"/>
+    <EventHandler event="windowClosing" listener="java.awt.event.WindowListener" parameters="java.awt.event.WindowEvent" handler="formWindowClosing"/>
+  </Events>
+  <AuxValues>
+    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
+    <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
+  </AuxValues>
+
+  <Layout>
+    <DimensionLayout dim="0">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Component id="InfoTabs" alignment="0" max="32767" attributes="0"/>
+          <Group type="102" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <Component id="InfoEntryLabel" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="1" attributes="0">
+                      <Component id="CancelButton" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Component id="SubmitButton" min="-2" max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+    <DimensionLayout dim="1">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="1" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="InfoEntryLabel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="InfoTabs" min="-2" pref="239" max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="SubmitButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="CancelButton" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+  </Layout>
+  <SubComponents>
+    <Container class="javax.swing.JTabbedPane" name="InfoTabs">
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>
+      <SubComponents>
+        <Container class="javax.swing.JPanel" name="ArtistTab">
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
+              <JTabbedPaneConstraints tabName="Artist">
+                <Property name="tabTitle" type="java.lang.String" value="Artist"/>
+              </JTabbedPaneConstraints>
+            </Constraint>
+          </Constraints>
+
+          <Layout>
+            <DimensionLayout dim="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="ArtistNameLabel" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="ArtistNameField" pref="308" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+            <DimensionLayout dim="1">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="ArtistNameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="ArtistNameField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace pref="180" max="32767" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+          </Layout>
+          <SubComponents>
+            <Component class="javax.swing.JLabel" name="ArtistNameLabel">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Artist Name: "/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JTextField" name="ArtistNameField">
+            </Component>
+          </SubComponents>
+        </Container>
+        <Container class="javax.swing.JPanel" name="AlbumTab">
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
+              <JTabbedPaneConstraints tabName="Album">
+                <Property name="tabTitle" type="java.lang.String" value="Album"/>
+              </JTabbedPaneConstraints>
+            </Constraint>
+          </Constraints>
+
+          <Layout>
+            <DimensionLayout dim="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="AlbumNameLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="AlbumNameField" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" attributes="0">
+                              <Component id="ReleaseDateLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="ReleaseDateField" pref="303" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="ArtistIDLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="ArtistIDField" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="GenreLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="GenreField" max="32767" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+            <DimensionLayout dim="1">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="AlbumNameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="AlbumNameField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="ArtistIDLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="ArtistIDField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="GenreLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="GenreField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="ReleaseDateLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="ReleaseDateField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace pref="102" max="32767" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+          </Layout>
+          <SubComponents>
+            <Component class="javax.swing.JLabel" name="AlbumNameLabel">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Album Name: "/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="ArtistIDLabel">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Artist ID:"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="GenreLabel">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Genre: "/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="ReleaseDateLabel">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Release Date:"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JTextField" name="AlbumNameField">
+            </Component>
+            <Component class="javax.swing.JTextField" name="ArtistIDField">
+            </Component>
+            <Component class="javax.swing.JTextField" name="GenreField">
+            </Component>
+            <Component class="javax.swing.JTextField" name="ReleaseDateField">
+            </Component>
+          </SubComponents>
+        </Container>
+        <Container class="javax.swing.JPanel" name="SongTab">
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
+              <JTabbedPaneConstraints tabName="Song">
+                <Property name="tabTitle" type="java.lang.String" value="Song"/>
+              </JTabbedPaneConstraints>
+            </Constraint>
+          </Constraints>
+
+          <Layout>
+            <DimensionLayout dim="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="SongNameLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="SongNameField" pref="313" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="AlbumIDLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="AlbumIDField" max="32767" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+            <DimensionLayout dim="1">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="SongNameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="SongNameField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="AlbumIDLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="AlbumIDField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace pref="154" max="32767" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+          </Layout>
+          <SubComponents>
+            <Component class="javax.swing.JLabel" name="SongNameLabel">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Song Name:"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="AlbumIDLabel">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Album ID:"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JTextField" name="SongNameField">
+            </Component>
+            <Component class="javax.swing.JTextField" name="AlbumIDField">
+            </Component>
+          </SubComponents>
+        </Container>
+        <Container class="javax.swing.JPanel" name="StockTab">
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
+              <JTabbedPaneConstraints tabName="Stock">
+                <Property name="tabTitle" type="java.lang.String" value="Stock"/>
+              </JTabbedPaneConstraints>
+            </Constraint>
+          </Constraints>
+
+          <Layout>
+            <DimensionLayout dim="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="StockAlbumIDLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="StockAlbumIDField" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" attributes="0">
+                              <Component id="FormatLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="FormatList" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="0" pref="265" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="StockVendorIDLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="StockVendorIDField" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="StockCostLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="StockCostField" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="StockPriceLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="StockPriceField" max="32767" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+            <DimensionLayout dim="1">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="StockAlbumIDLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="StockAlbumIDField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="FormatLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="FormatList" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="StockVendorIDLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="StockVendorIDField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="StockCostLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="StockCostField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="StockPriceLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="StockPriceField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace pref="76" max="32767" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+          </Layout>
+          <SubComponents>
+            <Component class="javax.swing.JLabel" name="StockAlbumIDLabel">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Album ID:"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="FormatLabel">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Format:"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="StockVendorIDLabel">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Vendor ID:"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="StockCostLabel">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Cost:"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="StockPriceLabel">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Sale Price:"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JTextField" name="StockAlbumIDField">
+            </Component>
+            <Component class="javax.swing.JComboBox" name="FormatList">
+              <Properties>
+                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                  <StringArray count="3">
+                    <StringItem index="0" value="CD"/>
+                    <StringItem index="1" value="Cassette"/>
+                    <StringItem index="2" value="Vinyl"/>
+                  </StringArray>
+                </Property>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JTextField" name="StockVendorIDField">
+            </Component>
+            <Component class="javax.swing.JTextField" name="StockCostField">
+            </Component>
+            <Component class="javax.swing.JTextField" name="StockPriceField">
+            </Component>
+          </SubComponents>
+        </Container>
+        <Container class="javax.swing.JPanel" name="VendorTab">
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
+              <JTabbedPaneConstraints tabName="Vendor">
+                <Property name="tabTitle" type="java.lang.String" value="Vendor"/>
+              </JTabbedPaneConstraints>
+            </Constraint>
+          </Constraints>
+
+          <Layout>
+            <DimensionLayout dim="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="VendorNameLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="VendorNameField" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" attributes="0">
+                              <Component id="VendorStateLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="VendorStateList" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="ContactNameLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="ContactNameField" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="ContactNumberLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="ContactNumberField" pref="289" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="VendorStreetLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="VendorStreetField" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="VendorCityLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="VendorCityField" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="VendorZIPLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="VendorZIPField" max="32767" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+            <DimensionLayout dim="1">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="VendorNameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="VendorNameField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="ContactNameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="ContactNameField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="ContactNumberLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="ContactNumberField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="VendorStreetLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="VendorStreetField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="VendorCityLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="VendorCityField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="VendorStateLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="VendorStateList" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="VendorZIPLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="VendorZIPField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace pref="24" max="32767" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+          </Layout>
+          <SubComponents>
+            <Component class="javax.swing.JLabel" name="VendorNameLabel">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Vendor Name:"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="ContactNameLabel">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Contact Name:"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="ContactNumberLabel">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Contact Number:"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="VendorStreetLabel">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Street:"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="VendorCityLabel">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="City:"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="VendorStateLabel">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="State:"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="VendorZIPLabel">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="ZIP:"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JComboBox" name="VendorStateList">
+              <Properties>
+                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                  <StringArray count="51">
+                    <StringItem index="0" value="AK"/>
+                    <StringItem index="1" value="AL"/>
+                    <StringItem index="2" value="AR"/>
+                    <StringItem index="3" value="AZ"/>
+                    <StringItem index="4" value="CA"/>
+                    <StringItem index="5" value="CO"/>
+                    <StringItem index="6" value="CT"/>
+                    <StringItem index="7" value="DC"/>
+                    <StringItem index="8" value="DE"/>
+                    <StringItem index="9" value="FL"/>
+                    <StringItem index="10" value="GA"/>
+                    <StringItem index="11" value="HI"/>
+                    <StringItem index="12" value="IA"/>
+                    <StringItem index="13" value="ID"/>
+                    <StringItem index="14" value="IL"/>
+                    <StringItem index="15" value="IN"/>
+                    <StringItem index="16" value="KS"/>
+                    <StringItem index="17" value="KY"/>
+                    <StringItem index="18" value="LA"/>
+                    <StringItem index="19" value="MA"/>
+                    <StringItem index="20" value="MD"/>
+                    <StringItem index="21" value="ME"/>
+                    <StringItem index="22" value="MI"/>
+                    <StringItem index="23" value="MN"/>
+                    <StringItem index="24" value="MO"/>
+                    <StringItem index="25" value="MS"/>
+                    <StringItem index="26" value="MT"/>
+                    <StringItem index="27" value="NC"/>
+                    <StringItem index="28" value="ND"/>
+                    <StringItem index="29" value="NE"/>
+                    <StringItem index="30" value="NH"/>
+                    <StringItem index="31" value="NJ"/>
+                    <StringItem index="32" value="NM"/>
+                    <StringItem index="33" value="NV"/>
+                    <StringItem index="34" value="NY"/>
+                    <StringItem index="35" value="OH"/>
+                    <StringItem index="36" value="OK"/>
+                    <StringItem index="37" value="OR"/>
+                    <StringItem index="38" value="PA"/>
+                    <StringItem index="39" value="RI"/>
+                    <StringItem index="40" value="SC"/>
+                    <StringItem index="41" value="SD"/>
+                    <StringItem index="42" value="TN"/>
+                    <StringItem index="43" value="TX"/>
+                    <StringItem index="44" value="UT"/>
+                    <StringItem index="45" value="VA"/>
+                    <StringItem index="46" value="VT"/>
+                    <StringItem index="47" value="WA"/>
+                    <StringItem index="48" value="WI"/>
+                    <StringItem index="49" value="WV"/>
+                    <StringItem index="50" value="WY"/>
+                  </StringArray>
+                </Property>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JTextField" name="VendorNameField">
+            </Component>
+            <Component class="javax.swing.JTextField" name="ContactNameField">
+            </Component>
+            <Component class="javax.swing.JTextField" name="ContactNumberField">
+            </Component>
+            <Component class="javax.swing.JTextField" name="VendorStreetField">
+            </Component>
+            <Component class="javax.swing.JTextField" name="VendorCityField">
+            </Component>
+            <Component class="javax.swing.JTextField" name="VendorZIPField">
+            </Component>
+          </SubComponents>
+        </Container>
+        <Container class="javax.swing.JPanel" name="CustomerTab">
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
+              <JTabbedPaneConstraints tabName="Customer">
+                <Property name="tabTitle" type="java.lang.String" value="Customer"/>
+              </JTabbedPaneConstraints>
+            </Constraint>
+          </Constraints>
+
+          <Layout>
+            <DimensionLayout dim="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="CustomerNameLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="CustomerNameField" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="PhoneNumberLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="PhoneNumberField" pref="297" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="CustomerStreetLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="CustomerStreetField" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="CustomerCityLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="CustomerCityField" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" attributes="0">
+                              <Component id="CustomerStateLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="CustomerStateList" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="CustomerZIPLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="CustomerZIPField" max="32767" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+            <DimensionLayout dim="1">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="CustomerNameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="CustomerNameField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="PhoneNumberLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="PhoneNumberField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="CustomerStreetLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="CustomerStreetField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="CustomerCityLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="CustomerCityField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="CustomerStateLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="CustomerStateList" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="CustomerZIPLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="CustomerZIPField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace pref="50" max="32767" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+          </Layout>
+          <SubComponents>
+            <Component class="javax.swing.JLabel" name="CustomerNameLabel">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Name:"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="PhoneNumberLabel">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Phone Number:"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="CustomerStreetLabel">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Street:"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="CustomerCityLabel">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="City:"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="CustomerStateLabel">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="State:"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="CustomerZIPLabel">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="ZIP:"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JComboBox" name="CustomerStateList">
+              <Properties>
+                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                  <StringArray count="51">
+                    <StringItem index="0" value="AK"/>
+                    <StringItem index="1" value="AL"/>
+                    <StringItem index="2" value="AR"/>
+                    <StringItem index="3" value="AZ"/>
+                    <StringItem index="4" value="CA"/>
+                    <StringItem index="5" value="CO"/>
+                    <StringItem index="6" value="CT"/>
+                    <StringItem index="7" value="DC"/>
+                    <StringItem index="8" value="DE"/>
+                    <StringItem index="9" value="FL"/>
+                    <StringItem index="10" value="GA"/>
+                    <StringItem index="11" value="HI"/>
+                    <StringItem index="12" value="IA"/>
+                    <StringItem index="13" value="ID"/>
+                    <StringItem index="14" value="IL"/>
+                    <StringItem index="15" value="IN"/>
+                    <StringItem index="16" value="KS"/>
+                    <StringItem index="17" value="KY"/>
+                    <StringItem index="18" value="LA"/>
+                    <StringItem index="19" value="MA"/>
+                    <StringItem index="20" value="MD"/>
+                    <StringItem index="21" value="ME"/>
+                    <StringItem index="22" value="MI"/>
+                    <StringItem index="23" value="MN"/>
+                    <StringItem index="24" value="MO"/>
+                    <StringItem index="25" value="MS"/>
+                    <StringItem index="26" value="MT"/>
+                    <StringItem index="27" value="NC"/>
+                    <StringItem index="28" value="ND"/>
+                    <StringItem index="29" value="NE"/>
+                    <StringItem index="30" value="NH"/>
+                    <StringItem index="31" value="NJ"/>
+                    <StringItem index="32" value="NM"/>
+                    <StringItem index="33" value="NV"/>
+                    <StringItem index="34" value="NY"/>
+                    <StringItem index="35" value="OH"/>
+                    <StringItem index="36" value="OK"/>
+                    <StringItem index="37" value="OR"/>
+                    <StringItem index="38" value="PA"/>
+                    <StringItem index="39" value="RI"/>
+                    <StringItem index="40" value="SC"/>
+                    <StringItem index="41" value="SD"/>
+                    <StringItem index="42" value="TN"/>
+                    <StringItem index="43" value="TX"/>
+                    <StringItem index="44" value="UT"/>
+                    <StringItem index="45" value="VA"/>
+                    <StringItem index="46" value="VT"/>
+                    <StringItem index="47" value="WA"/>
+                    <StringItem index="48" value="WI"/>
+                    <StringItem index="49" value="WV"/>
+                    <StringItem index="50" value="WY"/>
+                  </StringArray>
+                </Property>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JTextField" name="CustomerNameField">
+            </Component>
+            <Component class="javax.swing.JTextField" name="PhoneNumberField">
+            </Component>
+            <Component class="javax.swing.JTextField" name="CustomerStreetField">
+            </Component>
+            <Component class="javax.swing.JTextField" name="CustomerCityField">
+            </Component>
+            <Component class="javax.swing.JTextField" name="CustomerZIPField">
+            </Component>
+          </SubComponents>
+        </Container>
+      </SubComponents>
+    </Container>
+    <Component class="javax.swing.JLabel" name="InfoEntryLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Information Entry"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="SubmitButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Submit"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="SubmitButtonActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="CancelButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Cancel"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="CancelButtonActionPerformed"/>
+      </Events>
+    </Component>
+  </SubComponents>
+</Form>

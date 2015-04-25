@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
+  <Properties>
+    <Property name="defaultCloseOperation" type="int" value="2"/>
+  </Properties>
+  <SyntheticProperties>
+    <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
+    <SyntheticProperty name="generateCenter" type="boolean" value="false"/>
+  </SyntheticProperties>
+  <Events>
+    <EventHandler event="windowActivated" listener="java.awt.event.WindowListener" parameters="java.awt.event.WindowEvent" handler="formWindowActivated"/>
+    <EventHandler event="windowClosed" listener="java.awt.event.WindowListener" parameters="java.awt.event.WindowEvent" handler="formWindowClosed"/>
+    <EventHandler event="windowClosing" listener="java.awt.event.WindowListener" parameters="java.awt.event.WindowEvent" handler="formWindowClosing"/>
+  </Events>
+  <AuxValues>
+    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
+    <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
+  </AuxValues>
+
+  <Layout>
+    <DimensionLayout dim="0">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="LineItemScrollPane" pref="481" max="32767" attributes="0"/>
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
+                                      <Component id="TransactionViewLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <Component id="OrderTypeLabel" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Component id="OrderTypeList" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <Component id="OrderIDLabel" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Component id="OrderIDField" max="32767" attributes="0"/>
+                                      </Group>
+                                  </Group>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="NameDisplayLabel" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="NameLabel" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="OrderDateDisplayLabel" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="OrderDateLabel" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="IDSubmitButton" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="ReceiveDateDisplayLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="ReceiveDateLabel" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="ReceivedDisplayLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="ReceivedLabel" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="PaymentTypeDisplayLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="PaymentTypeLabel" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="DeleteButton" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Component id="ExitButton" min="-2" max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+    <DimensionLayout dim="1">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="TransactionViewLabel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="OrderTypeLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="OrderTypeList" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="OrderIDLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="OrderIDField" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="IDSubmitButton" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="NameDisplayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="NameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="OrderDateDisplayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="OrderDateLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="ReceiveDateDisplayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="ReceiveDateLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="ReceivedDisplayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="ReceivedLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="PaymentTypeDisplayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="PaymentTypeLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="LineItemScrollPane" min="-2" pref="100" max="-2" attributes="0"/>
+              <EmptySpace pref="25" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="DeleteButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="ExitButton" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+  </Layout>
+  <SubComponents>
+    <Component class="javax.swing.JLabel" name="TransactionViewLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Transaction View"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="OrderTypeLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Type of Order:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JComboBox" name="OrderTypeList">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="2">
+            <StringItem index="0" value="Sales"/>
+            <StringItem index="1" value="Purchase"/>
+          </StringArray>
+        </Property>
+      </Properties>
+      <Events>
+        <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="OrderTypeListItemStateChanged"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JLabel" name="OrderIDLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Order ID:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="OrderIDField">
+    </Component>
+    <Component class="javax.swing.JButton" name="IDSubmitButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Submit"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="IDSubmitButtonActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JLabel" name="NameDisplayLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Customer/Vendor:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="NameLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Name"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="OrderDateDisplayLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Date of Order:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="OrderDateLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Date"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="ReceivedDisplayLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Received?:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="ReceivedLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Yes/No"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="ReceiveDateDisplayLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Date to Receive: "/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="ReceiveDateLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Date"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="PaymentTypeDisplayLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Payment Method:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="PaymentTypeLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Payment Type"/>
+      </Properties>
+    </Component>
+    <Container class="javax.swing.JScrollPane" name="LineItemScrollPane">
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+      <SubComponents>
+        <Component class="javax.swing.JTable" name="LineItems">
+          <Properties>
+            <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
+              <Table columnCount="4" rowCount="4">
+                <Column editable="true" title="Title 1" type="java.lang.Object"/>
+                <Column editable="true" title="Title 2" type="java.lang.Object"/>
+                <Column editable="true" title="Title 3" type="java.lang.Object"/>
+                <Column editable="true" title="Title 4" type="java.lang.Object"/>
+              </Table>
+            </Property>
+          </Properties>
+        </Component>
+      </SubComponents>
+    </Container>
+    <Component class="javax.swing.JButton" name="DeleteButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Delete Order Record"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="DeleteButtonActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="ExitButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Exit"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ExitButtonActionPerformed"/>
+      </Events>
+    </Component>
+  </SubComponents>
+</Form>
