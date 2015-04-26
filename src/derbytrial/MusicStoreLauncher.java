@@ -41,7 +41,7 @@ public class MusicStoreLauncher {
                 }
             }
             if (createFromScratch) {
-
+                System.out.println("here");
                 try {
                     createMusicStore();
                     populateTables();
@@ -62,15 +62,14 @@ public class MusicStoreLauncher {
                 conn.createStatement().execute("set schema MUSICSTORE");
             }
             
-            ResultSet rs2 = conn.createStatement().executeQuery("SELECT CAST(ARTIST_ID AS CHAR(10)) FROM ARTIST");
-            rs2.next();
-            System.out.println(rs2.getString(1));
             deleteViews();
             createViews();
+            //test();
         } catch (SQLException s) {
             System.out.println(s.getMessage());
             s.printStackTrace();
         }
+        
 
         // Open Master Menu JPanel after making connection
         if (!MasterMenu.getIsOpen()) {
@@ -78,6 +77,18 @@ public class MusicStoreLauncher {
             MasterMenu MM = new MasterMenu();
             MM.setVisible(true);
         }
+    }
+    
+    private static void test() throws SQLException{
+        System.out.println("starting query");
+        Long time = System.currentTimeMillis();
+        ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM V_ARTIST_INFO");
+        double seconds = (System.currentTimeMillis() - time) / 1000.0;
+        System.out.println("elapsed: " + (System.currentTimeMillis() - time));
+        while(rs.next()){
+            System.out.println(rs.getInt(1) + ", " + rs.getString(2));
+        }
+        
     }
     
     private static void deleteViews() throws SQLException{
@@ -101,15 +112,17 @@ public class MusicStoreLauncher {
     
     private static void createViews() throws SQLException{
         Statement stmt = conn.createStatement();
-        
         stmt.executeUpdate("CREATE VIEW V_ARTIST_INFO "
                 + "(ID, NAME, SONGS, ALBUMS) "
                 + "AS "
-                + "SELECT AR.ARTIST_ID, AR.ARTIST_NAME, COUNT(DISTINCT(S.SONG_ID)), COUNT(DISTINCT(AL.ALBUM_ID)) "
-                + "FROM ARTIST AR, SONG S, ALBUM AL "
-                + "WHERE AR.ARTIST_ID = AL.ARTIST_ID "
-                + "AND S.ALBUM_ID = AL.ALBUM_ID "
-                + "GROUP BY AR.ARTIST_ID, AR.ARTIST_NAME");
+                + "SELECT AR.ARTIST_ID, AR.ARTIST_NAME, COALESCE(T1.SONG_CNT,0), COALESCE(T2.ALBUM_CNT,0) "
+                + "FROM ARTIST AR LEFT OUTER JOIN ("
+                    + "SELECT ARTIST_ID, COUNT(*) SONG_CNT "
+                    + "FROM SONG "
+                    + "GROUP BY ARTIST_ID) T1 ON T1.ARTIST_ID = AR.ARTIST_ID "
+                + "LEFT OUTER JOIN (SELECT ARTIST_ID, COUNT(*) ALBUM_CNT "
+                + "FROM ALBUM "
+                + "GROUP BY ARTIST_ID) T2 ON T2.ARTIST_ID = AR.ARTIST_ID");
         
         stmt.executeUpdate("CREATE VIEW V_ALBUM_INFO "
                 + "(ID, NAME, ARTIST, SONGS, RELEASE_DATE) "
@@ -155,10 +168,34 @@ public class MusicStoreLauncher {
         stmt.executeUpdate("CREATE VIEW V_CUSTOMER_INFO "
                 + "(ID,NAME,ORDERS,TOTAL_REVENUE,PHONE,ADDRESS,CITY,STATE,ZIP ) "
                 + "AS "
-                + "SELECT C.CUSTOMER_ID, C.NAME, COUNT(DISTINCT(S.SALE_ID)), SUM(SOL.COST), C.CONTACT_NUMBER, C.ADDRESS, C.CITY, C.STATE, C.ZIP "
-                + "FROM CUSTOMER C, SALE S, SALE_ORDER_LINE SOL "
-                + "WHERE C.CUSTOMER_ID = S.CUSTOMER_ID AND S.SALE_ID = SOL.SALE_ID "
-                + "GROUP BY C.CUSTOMER_ID, C.NAME, C.CONTACT_NUMBER, C.ADDRESS, C.CITY, C.STATE, C.ZIP");
+                + "SELECT C.CUSTOMER_ID, C.NAME, COALESCE(T1.SALE_CNT,0), COALESCE(T2.COST_SUM, 0), C.CONTACT_NUMBER, C.ADDRESS, C.CITY, C.STATE, C.ZIP "
+                + "FROM CUSTOMER C LEFT OUTER JOIN (SELECT CUSTOMER_ID, COUNT(*) SALE_CNT "
+                                                    + "FROM SALE "
+                                                    + "GROUP BY CUSTOMER_ID) T1 "
+                                 + "ON C.CUSTOMER_ID = T1.CUSTOMER_ID "
+                + "LEFT OUTER JOIN (SELECT CUSTOMER_ID, SUM(COST) COST_SUM "
+                                 + "FROM SALE S INNER JOIN SALE_ORDER_LINE SOL ON S.SALE_ID = SOL.SALE_ID "
+                                 + "GROUP BY CUSTOMER_ID) T2 ON T1.CUSTOMER_ID = T2.CUSTOMER_ID");
+        
+        stmt.executeUpdate("CREATE VIEW V_PURCHASE_ORDER_INFO "
+                + "(ID, VENDOR_ID, VENDOR_NAME, ORDER_DATE, DATE_TO_RECEIVE, TOTAL_COST) "
+                + "AS "
+                + "SELECT P.PO_ID, V.VENDOR_ID, V.VENDOR_NAME, CAST(ORDER_DATE AS VARCHAR(10)), CAST(DATE_TO_RECEIVE AS VARCHAR(10)), "
+                    + "(SELECT SUM(COST) "
+                    + "FROM PURCHASE_ORDER_LINE POL "
+                    + "WHERE POL.PO_ID = P.PO_ID)"
+                + "FROM PURCHASE_ORDER P, VENDOR V "
+                + "WHERE P.VENDOR_ID = V.VENDOR_ID");
+        
+        stmt.executeUpdate("CREATE VIEW V_SALE_INFO "
+                + "(ID, CUSTOMER_ID, CUSTOMER_NAME, DATE, TOTAL_PRICE) "
+                + "AS "
+                + "SELECT S.SALE_ID, C.CUSTOMER_ID, C.NAME, CAST(DATE AS VARCHAR(10)), "
+                    + "(SELECT SUM(SOL.COST) "
+                    + "FROM SALE_ORDER_LINE SOL "
+                    + "WHERE SOL.SALE_ID = S.SALE_ID) "
+                + "FROM CUSTOMER C, SALE S "
+                + "WHERE C.CUSTOMER_ID = S.CUSTOMER_ID");
         conn.commit();
         stmt.close();
     }
@@ -219,7 +256,7 @@ public class MusicStoreLauncher {
         Statement stmt = conn.createStatement();
         stmt.execute("set schema MUSICSTORE");
 
-        System.out.println("1");
+        System.out.println("12");
         //artist table
         for (int i = 0; i < artistList.size(); i++) {
 
@@ -242,7 +279,7 @@ public class MusicStoreLauncher {
             String[] array = s.split("\t");
 
             String create
-                    = "insert into SONG(SONG_NAME,ALBUM_ID) "
+                    = "insert into SONG(SONG_NAME,ALBUM_ID,ARTIST_ID) "
                     + prepValues(array);
             stmt.executeUpdate(create);
         }
@@ -413,8 +450,10 @@ public class MusicStoreLauncher {
                 + "SONG_ID int NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), "
                 + "SONG_NAME varchar(45) NOT NULL, "
                 + "ALBUM_ID int, "
+                + "ARTIST_ID int, "
                 + "PRIMARY KEY (SONG_ID), "
-                + "FOREIGN KEY (ALBUM_ID) REFERENCES ALBUM (ALBUM_ID))";
+                + "FOREIGN KEY (ALBUM_ID) REFERENCES ALBUM (ALBUM_ID), "
+                + "FOREIGN KEY (ARTIST_ID) REFERENCES ARTIST (ARTIST_ID))";
         stmt.executeUpdate(createString);
 
         //Vendor table

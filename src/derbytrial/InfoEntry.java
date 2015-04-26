@@ -5,30 +5,43 @@
  */
 package derbytrial;
 
+import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Types;
+import java.text.ParseException;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Steven
  */
 public class InfoEntry extends javax.swing.JFrame {
 
-    /**
-     * Creates new form InfoEntry
-     */
+    Connection conn;
+
     public InfoEntry() {
+        conn = MusicStoreLauncher.conn;
+
         initComponents();
     }
 
     // The code below sets up a check to make sure duplicate windows don't open.
     private static boolean isOpen = false;
-    
-    public static boolean getIsOpen(){
+
+    public static boolean getIsOpen() {
         return isOpen;
     }
-    
-    public static void setIsOpen(boolean set){
+
+    public static void setIsOpen(boolean set) {
         isOpen = set;
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -536,31 +549,128 @@ public class InfoEntry extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_CancelButtonActionPerformed
 
+
     private void SubmitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SubmitButtonActionPerformed
         // TODO add your handling code here:
-        System.out.println(InfoTabs.getSelectedIndex());
-        switch (InfoTabs.getSelectedIndex()) {
-            case 0:
-                // get Artist field info and update
-                break;
-            case 1:
-                // get Album info and update
-                break;
-            case 2:
-                // get Song info and update
-                break;
-            case 3:
-                // get Stock info and update
-                break;
-            case 4:
-                // get Vendor info and update
-                break;
-            case 5:
-                // get Customer info and update
-                break;
-            default: break;
+
+        try {
+            String[] fieldText = null;
+            String tableName = null;
+            String query = null;
+            switch (InfoTabs.getSelectedIndex()) {
+                case 0:
+                    // get Artist field info and update
+                    String[] artistFields = {ArtistNameField.getText()};
+                    fieldText = artistFields;
+                    tableName = "ARTIST";
+                    query = "insert into ARTIST(ARTIST_NAME) ";
+                    break;
+                case 1:
+                    // get Album info and update
+                    String[] albumFields = {AlbumNameField.getText(), ReleaseDateField.getText(), GenreField.getText(), ArtistIDField.getText()};
+                    fieldText = albumFields;
+                    tableName = "ALBUM";
+                    query = "insert into ALBUM(ALBUM_NAME,RELEASE_DATE,GENRE,ARTIST_ID) ";
+                    break;
+                case 2:
+                    // get Song info and update
+                    String[] songFields = {SongNameField.getText(), AlbumIDField.getText()};
+                    fieldText = songFields;
+                    tableName = "SONG";
+                    query = "insert into SONG(SONG_NAME,ALBUM_ID) ";
+                    break;
+                case 3:
+                    String[] stockFields = {AlbumIDField.getText(), FormatList.getSelectedItem().toString(), StockVendorIDLabel.getText(), StockPriceField.getText(), "0", "0", StockCostField.getText()};
+                    fieldText = stockFields;
+                    tableName = "STOCK";
+                    query = "insert into STOCK(ALBUM_ID,FORMAT,VENDOR_ID,SALE_PRICE,AMOUNT,ON_ORDER,VENDOR_COST) ";
+                    // get Stock info and update
+                    break;
+                case 4:
+                    String[] vendorFields = {VendorNameField.getText(), VendorStreetField.getText(), ContactNameField.getText(), ContactNumberField.getText(), VendorCityField.getText(), VendorStateList.getSelectedItem().toString(), VendorZIPField.getText()};
+                    fieldText = vendorFields;
+                    tableName = "VENDOR";
+                    query = "insert into VENDOR(VENDOR_NAME,ADDRESS,CONTACT_NAME,CONTACT_NUMBER,CITY,STATE,ZIP) ";
+                    // get Vendor info and update
+                    break;
+                case 5:
+                    // get Customer info and update
+                    String[] customerFields = {CustomerNameField.getText(), CustomerStreetField.getText(), PhoneNumberField.getText(), CustomerCityField.getText(), CustomerStateList.getSelectedItem().toString(), CustomerZIPField.getText()};
+                    fieldText = customerFields;
+                    tableName = "CUSTOMER";
+                    query = "insert into CUSTOMER(NAME,ADDRESS,CONTACT_NUMBER,CITY,STATE,ZIP) ";
+                    break;
+                default:
+                    break;
+            }
+
+            StringBuilder queryBuilder = new StringBuilder(query);
+            queryBuilder.append("values(");
+            for (int i = 0; i < fieldText.length; i++) {
+                fieldText[i] = fieldText[i].trim();
+                queryBuilder.append("?,");
+            }
+            queryBuilder.deleteCharAt(queryBuilder.length() - 1);
+            queryBuilder.append(")");
+            query = queryBuilder.toString();
+            
+            System.out.println(query);
+
+            PreparedStatement prepStmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            DatabaseMetaData meta = conn.getMetaData();
+            ResultSet rs = meta.getColumns(null, null, tableName, null);
+
+            rs.next(); //skipping auto-generated ID column
+
+            for (int i = 0; i < fieldText.length; i++) {
+                rs.next();
+                int colType = rs.getInt("DATA_TYPE");
+                switch (colType) {
+                    case Types.INTEGER:
+                        prepStmt.setInt(i + 1, Integer.parseInt(fieldText[i]));
+                        break;
+                    case Types.DATE:
+                        prepStmt.setDate(i + 1, Date.valueOf(fieldText[i]));
+                        break;
+                    case Types.DECIMAL:
+                        prepStmt.setBigDecimal(i + 1, new BigDecimal(fieldText[i]));
+                        break;
+                    case Types.CHAR:
+                    case Types.LONGNVARCHAR:
+                    case Types.VARCHAR:
+                    case Types.LONGVARCHAR:
+                    case Types.NCHAR:
+                    case Types.NVARCHAR:
+                        prepStmt.setString(i + 1, fieldText[i]);
+                        System.out.println(fieldText[i]);
+                        break;
+                    default:
+                        System.err.println("Error in InfoEntry: sql column type not supported");
+                        return;
+                }
+            }
+
+            System.out.println(prepStmt.executeUpdate());
+            conn.commit();
+
+            ResultSet generatedKeys = prepStmt.getGeneratedKeys();
+            if (generatedKeys.next()) {
+
+                JOptionPane.showMessageDialog(this, "ID for inserted record is: " + generatedKeys.getLong(1));
+            } else {
+                JOptionPane.showMessageDialog(this, "Unexpected Error: ID retreival failed");
+            }
+
+        } catch (SQLException e) {
+            //invalid insert operation: please check that your ID values are correct
+            System.err.println(e);
+        } catch (NumberFormatException n) {
+            //number format value format - decimals and integers possible
+        } catch (IllegalArgumentException i) {
+            //illegal date format
+
         }
-        
+
     }//GEN-LAST:event_SubmitButtonActionPerformed
 
     /**

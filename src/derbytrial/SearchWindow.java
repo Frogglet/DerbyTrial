@@ -1,11 +1,12 @@
 package derbytrial;
 
+import java.math.BigDecimal;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.sql.Types;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -21,19 +22,22 @@ public class SearchWindow extends javax.swing.JFrame {
     /**
      * Creates new form InfoView
      */
-    Map<String, String> typeToTable, typeToKeyWordSQL, nameModMap;
+    Map<String, String> typeToTable;
     Map<String, String[]> typeToColNames;
-    Map<String, Boolean[]> typeToIsNumeric;
 
     private static final String NUM_QUERY
-            = "SELECT * FROM #tableName WHERE CAST(#colName AS CHAR(10)) = ? ORDER BY #orderBy";
+            = "SELECT * FROM #tableName WHERE #colName = ? ORDER BY #orderBy";
     private static final String CHAR_QUERY
             = "SELECT * FROM #tableName WHERE UPPER(#colName) LIKE UPPER(?) ORDER BY #orderBy";
     private static final String EMPTY_QUERY
             = "SELECT * FROM #tableName ORDER BY #orderBy";
 
+    Connection conn;
+
     public SearchWindow() {
         initComponents();
+
+        conn = MusicStoreLauncher.conn;
 
         typeToTable = new HashMap<>();
         typeToTable.put("Artists", "V_ARTIST_INFO");
@@ -42,33 +46,18 @@ public class SearchWindow extends javax.swing.JFrame {
         typeToTable.put("Stock", "V_STOCK_INFO");
         typeToTable.put("Vendors", "V_VENDOR_INFO");
         typeToTable.put("Customers", "V_CUSTOMER_INFO");
-
-        typeToKeyWordSQL = new HashMap<>();
-        typeToKeyWordSQL.put("Artists", "SELECT * FROM V_ARTIST_INFO WHERE NAME LIKE ?");
-        typeToKeyWordSQL.put("Albums", "SELECT * FROM V_ALBUM_INFO WHERE NAME LIKE ? "
-                + "OR ARTIST LIKE ?");
-        typeToKeyWordSQL.put("Songs", "SELECT * FROM V_SONG_INFO WHERE NAME LIKE ? "
-                + "OR ARTIST LIKE ? OR ALBUM LIKE ?");
+        typeToTable.put("Purchase Orders", "V_PURCHASE_ORDER_INFO");
+        typeToTable.put("Sales", "V_SALE_INFO");
 
         typeToColNames = new HashMap<>();
         typeToColNames.put("Artists", new String[]{"ID", "Name", "Songs", "Albums"});
         typeToColNames.put("Albums", new String[]{"ID", "Name", "Artist", "Songs", "Release Date"});
         typeToColNames.put("Songs", new String[]{"ID", "Name", "Artist Name", "Album Name"});
-        typeToColNames.put("Stock", new String[]{"Stock ID", "Album ID", "Album Name", "Artist", "Format", "Price", "In Stock", "On Order", "Vendor ID","Vendor Price"});
+        typeToColNames.put("Stock", new String[]{"Stock ID", "Album ID", "Album Name", "Artist", "Format", "Price", "In Stock", "On Order", "Vendor ID", "Vendor Price"});
         typeToColNames.put("Vendors", new String[]{"ID", "Name", "Contact", "Phone", "Items Carried", "Address", "State", "Zip"});
         typeToColNames.put("Customers", new String[]{"ID", "Name", "Orders", "Total Revenue", "Phone", "Address", "City", "State", "Zip"});
-
-        nameModMap = new HashMap<>();
-        nameModMap.put("Stock", "ALBUM_");
-
-        typeToIsNumeric = new HashMap<>();
-        typeToIsNumeric.put("Artists", new Boolean[]{true, false, true, true});
-        typeToIsNumeric.put("Albums", new Boolean[]{true, false, false, true, false});
-        typeToIsNumeric.put("Songs", new Boolean[]{true, false, false, false});
-        typeToIsNumeric.put("Stock", new Boolean[]{true, true, false, false, false, true, true, true, true, true});
-        typeToIsNumeric.put("Vendors", new Boolean[]{true, false, false, false, true, false, false, true});
-        typeToIsNumeric.put("Customers", new Boolean[]{true, false, true, true, false, false, false, false, true});
-
+        typeToColNames.put("Purchase Orders", new String[]{"ID", "Vendor ID", "Vendor Name", "Order Date", "Date to Receive", "Total Cost"});
+        typeToColNames.put("Sales", new String[]{"ID", "Customer ID", "Customer Name", "Date", "Total Price"});
     }
 
     // The code below sets up a check to make sure duplicate windows don't open.
@@ -143,7 +132,7 @@ public class SearchWindow extends javax.swing.JFrame {
 
         RecordTypeLabel.setText("Record Type: ");
 
-        recordTypeCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Artists", "Albums", "Songs", "Stock", "Vendors", "Customers" }));
+        recordTypeCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Artists", "Albums", "Songs", "Stock", "Vendors", "Customers", "Purchase Orders", "Sales" }));
         recordTypeCombo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 recordTypeComboActionPerformed(evt);
@@ -155,7 +144,7 @@ public class SearchWindow extends javax.swing.JFrame {
         IDSearchButton.setText("Search");
         IDSearchButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                IDSearchButtonActionPerformed(evt);
+                searchButtonActionPerformed(evt);
             }
         });
 
@@ -186,9 +175,9 @@ public class SearchWindow extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(TableScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 522, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(TableScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 522, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
@@ -202,11 +191,7 @@ public class SearchWindow extends javax.swing.JFrame {
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(searchFieldCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(IDSearchButton)))
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addContainerGap())
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(IDSearchButton))))
                             .addComponent(InfoViewLabel)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(RecordTypeLabel)
@@ -218,7 +203,8 @@ public class SearchWindow extends javax.swing.JFrame {
                                 .addComponent(orderByCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(sortOrder, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -249,7 +235,7 @@ public class SearchWindow extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void IDSearchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IDSearchButtonActionPerformed
+    private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
         JDBCTableModel newModel;
         String recordType = recordTypeCombo.getSelectedItem().toString();
 
@@ -264,40 +250,80 @@ public class SearchWindow extends javax.swing.JFrame {
         } else {
             orderBy += " DESC";
         }
-        String searchTerm = searchField.getText();
+        String searchTerm = searchField.getText().trim();
+        PreparedStatement prepStatement = null;
 
-        boolean isEmpty = searchTerm.isEmpty();
+        try {
+            String query;
 
-        boolean isNumeric = typeToIsNumeric.get(recordType)[searchFieldCombo.getSelectedIndex()];
+            if (searchTerm.isEmpty()) {
+                query = EMPTY_QUERY;
+                query = query.replace("#tableName", tableName);
+                query = query.replace("#orderBy", orderBy);
+                query = query.replace("#colName", colName);
+                prepStatement = conn.prepareStatement(query);
+            } else {
+                Integer colType = Utils.getType(tableName, colName);
 
-        String query;
-
-        if (isEmpty) {
-            query = EMPTY_QUERY;
-        } else if (isNumeric) {
-            query = NUM_QUERY;
-            searchTerm += "          ";
-            searchTerm = searchTerm.replace("^(.{10})", "$1");
-        } else {
-            query = CHAR_QUERY;
-            searchTerm = "%" + searchField.getText() + "%";
-        }
-
-        query = query.replace("#tableName", tableName);
-        query = query.replace("#orderBy", orderBy);
-        query = query.replace("#colName", colName);
-
-        try (PreparedStatement prepStatement = MusicStoreLauncher.conn.prepareStatement(query)) {
-            if (!isEmpty) {
-                prepStatement.setString(1, searchTerm);
+                switch (colType) {
+                    case Types.INTEGER:
+                        query = NUM_QUERY;
+                        query = query.replace("#tableName", tableName);
+                        query = query.replace("#orderBy", orderBy);
+                        query = query.replace("#colName", colName);
+                        prepStatement = conn.prepareStatement(query);
+                        prepStatement.setInt(1, Integer.parseInt(searchTerm));
+                        break;
+                    case Types.FLOAT:
+                        query = NUM_QUERY;
+                        query = query.replace("#tableName", tableName);
+                        query = query.replace("#orderBy", orderBy);
+                        query = query.replace("#colName", colName);
+                        prepStatement = conn.prepareStatement(query);
+                        prepStatement.setFloat(1, Float.parseFloat(searchTerm));
+                        break;
+                    case Types.DECIMAL:
+                        query = NUM_QUERY;
+                        query = query.replace("#tableName", tableName);
+                        query = query.replace("#orderBy", orderBy);
+                        query = query.replace("#colName", colName);
+                        prepStatement = conn.prepareStatement(query);
+                        prepStatement.setBigDecimal(1, new BigDecimal(searchTerm));
+                        break;
+                    case Types.DOUBLE:
+                    case Types.REAL:
+                        query = NUM_QUERY;
+                        query = query.replace("#tableName", tableName);
+                        query = query.replace("#orderBy", orderBy);
+                        query = query.replace("#colName", colName);
+                        prepStatement = conn.prepareStatement(query);
+                        prepStatement.setDouble(1, Double.parseDouble(searchTerm));
+                        break;
+                    default:
+                        query = CHAR_QUERY;
+                        query = query.replace("#tableName", tableName);
+                        query = query.replace("#orderBy", orderBy);
+                        query = query.replace("#colName", colName);
+                        prepStatement = conn.prepareStatement(query);
+                        prepStatement.setString(1, "%" + searchTerm + "%");
+                        break;
+                }
             }
 
             newModel = new JDBCTableModel(MusicStoreLauncher.conn, tableName, prepStatement);
             ResultsTable.setModel(newModel);
+
         } catch (SQLException ex) {
-            Logger.getLogger(MusicSearch.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex);
+        } catch (NumberFormatException i) {
+            System.out.println("numberFormatException");
+        } finally {
+            try {
+                prepStatement.close();
+            } catch (Exception s) {
+            }
         }
-    }//GEN-LAST:event_IDSearchButtonActionPerformed
+    }//GEN-LAST:event_searchButtonActionPerformed
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
         // TODO add your handling code here:

@@ -45,7 +45,6 @@ public class DummyDataCreator {
     private static String[] vowels = {"a", "e", "i", "o", "u"};
 
     private static ArrayList<String> artistList = new ArrayList<>(),
-            albumList = new ArrayList<>(),
             songList = new ArrayList<>(),
             vendorList = new ArrayList<>(),
             customerList = new ArrayList<>(),
@@ -54,6 +53,7 @@ public class DummyDataCreator {
             purchaseLineList = new ArrayList<>();
 
     private static ArrayList<Stock> stockList = new ArrayList<>();
+    private static ArrayList<Album> albumList = new ArrayList<>();
 
     private static LocalDate startPurchases = LocalDate.of(1987, 2, 14),
             startSales = LocalDate.of(1987, 7, 26);
@@ -233,7 +233,7 @@ public class DummyDataCreator {
                     writer.write(entry);
                     writer.newLine();
 
-                    albumList.add(entry);
+                    albumList.add(new Album(artistID));
                 }
             }
         } catch (IOException x) {
@@ -259,8 +259,10 @@ public class DummyDataCreator {
                     }
 
                     int albumID = i + 1;
+                    
+                    int artistID = albumList.get(i).artistID;
 
-                    entry += wrap(name) + "\t" + albumID;
+                    entry += wrap(name) + "\t" + albumID + "\t" + artistID;
 
                     writer.write(entry);
                     writer.newLine();
@@ -732,6 +734,13 @@ public class DummyDataCreator {
 
         public void merge(Need n) {
             amount += n.amount;
+        }
+    }
+    
+    private static class Album{
+        public int artistID;
+        public Album (int artistID){
+            this.artistID = artistID;
         }
     }
 
