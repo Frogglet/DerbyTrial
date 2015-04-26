@@ -127,11 +127,12 @@ public class MusicStoreLauncher {
         stmt.executeUpdate("CREATE VIEW V_ALBUM_INFO "
                 + "(ID, NAME, ARTIST, SONGS, RELEASE_DATE) "
                 + "AS "
-                + "SELECT AL.ALBUM_ID, AL.ALBUM_NAME, AR.ARTIST_NAME, COUNT(DISTINCT(S.SONG_ID)), CAST(AL.RELEASE_DATE AS VARCHAR(15)) "
-                + "FROM ARTIST AR, SONG S, ALBUM AL "
-                + "WHERE AR.ARTIST_ID = AL.ARTIST_ID "
-                + "AND S.ALBUM_ID = AL.ALBUM_ID "
-                + "GROUP BY AL.ALBUM_ID, AL.ALBUM_NAME, AR.ARTIST_NAME, CAST(AL.RELEASE_DATE AS VARCHAR(15))");
+                + "SELECT AL.ALBUM_ID, ALBUM_NAME, AR.ARTIST_NAME, COALESCE(T1.SONG_CNT,0), CAST(AL.RELEASE_DATE AS VARCHAR(15)) "
+                + "FROM ALBUM AL LEFT OUTER JOIN (SELECT ALBUM_ID, COUNT(*) SONG_CNT "
+                +                                "FROM SONG "
+                                                + "GROUP BY ALBUM_ID) T1 "
+                                                + "ON T1.ALBUM_ID = AL.ALBUM_ID "
+                                + "INNER JOIN ARTIST AR ON AL.ARTIST_ID = AR.ARTIST_ID");
         
         stmt.executeUpdate("CREATE VIEW V_ALBUM_CARRY_INFO "
                 + "(NAME, CARRY) "
@@ -152,11 +153,11 @@ public class MusicStoreLauncher {
         stmt.executeUpdate("CREATE VIEW V_VENDOR_INFO "
                 + "(ID, NAME, CONTACT, PHONE, ITEMS_CARRIED, ADDRESS, CITY, STATE, ZIP) "
                 + "AS "
-                + "SELECT V.VENDOR_ID, V.VENDOR_NAME, V.CONTACT_NAME, V.CONTACT_NUMBER, "
-                    + "COUNT(*), V.ADDRESS, V.CITY, V.STATE, V.ZIP "
-                + "FROM STOCK S, VENDOR V "
-                + "WHERE V.VENDOR_ID = S.VENDOR_ID "
-                + "GROUP BY V.VENDOR_ID, V.VENDOR_NAME, V.CONTACT_NAME, V.CONTACT_NUMBER, V.ADDRESS, V.CITY, V.STATE, V.ZIP");
+                + "SELECT V.VENDOR_ID, VENDOR_NAME, CONTACT_NAME, CONTACT_NUMBER, COALESCE(T1.STOCK_CNT,0), ADDRESS, CITY, STATE, ZIP "
+                + "FROM VENDOR V LEFT OUTER JOIN (SELECT VENDOR_ID, COUNT(*) STOCK_CNT "
+                                                + "FROM STOCK "
+                                                + "GROUP BY VENDOR_ID) T1 "
+                                                + "ON V.VENDOR_ID = T1.VENDOR_ID");
         
         stmt.executeUpdate("CREATE VIEW V_SONG_INFO "
                 + "(ID, ALBUM_ID, NAME, ARTIST_NAME, ALBUM_NAME) "
@@ -440,7 +441,7 @@ public class MusicStoreLauncher {
                 + "ALBUM_NAME varchar(45) NOT NULL ,"
                 + "RELEASE_DATE date,"
                 + "GENRE varchar(45),"
-                + "ARTIST_ID int,"
+                + "ARTIST_ID int NOT NULL,"
                 + "PRIMARY KEY (ALBUM_ID), "
                 + "FOREIGN KEY (ARTIST_ID) REFERENCES ARTIST (ARTIST_ID))";
         stmt.executeUpdate(createString);
