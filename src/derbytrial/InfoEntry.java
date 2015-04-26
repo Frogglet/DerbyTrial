@@ -613,7 +613,7 @@ public class InfoEntry extends javax.swing.JFrame {
             queryBuilder.deleteCharAt(queryBuilder.length() - 1);
             queryBuilder.append(")");
             query = queryBuilder.toString();
-            
+
             System.out.println(query);
 
             PreparedStatement prepStmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
@@ -662,13 +662,13 @@ public class InfoEntry extends javax.swing.JFrame {
             }
 
         } catch (SQLException e) {
-            //invalid insert operation: please check that your ID values are correct
+            JOptionPane.showMessageDialog(this, "Invalid insert operation: \nPlease check that your ID values are correct.");
             System.err.println(e);
         } catch (NumberFormatException n) {
-            //number format value format - decimals and integers possible
+            JOptionPane.showMessageDialog(this, "Illegal values entered: \nPlease make sure only numbers are used for \nnumerical entries.");
         } catch (IllegalArgumentException i) {
             //illegal date format
-
+            JOptionPane.showMessageDialog(this, "Illegal Date: \nPlease enter date in yyyy-mm-dd format.");
         }
 
     }//GEN-LAST:event_SubmitButtonActionPerformed
