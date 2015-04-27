@@ -96,30 +96,30 @@
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Component id="TransactionViewLabel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="OrderTypeLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="OrderTypeList" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="OrderIDLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="OrderIDField" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="IDSubmitButton" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="NameDisplayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="NameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="OrderDateDisplayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="OrderDateLabel" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="ReceiveDateDisplayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="ReceiveDateLabel" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -129,19 +129,19 @@
                   <Component id="PaymentTypeDisplayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="PaymentTypeLabel" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel1" alignment="3" min="-2" pref="14" max="-2" attributes="0"/>
                   <Component id="priceLabel" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Component id="LineItemScrollPane" min="-2" pref="100" max="-2" attributes="0"/>
-              <EmptySpace pref="64" max="32767" attributes="0"/>
+              <Component id="LineItemScrollPane" pref="146" max="32767" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="DeleteButton" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="ExitButton" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -192,7 +192,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="NameLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Name"/>
+        <Property name="text" type="java.lang.String" value="-"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="OrderDateDisplayLabel">
@@ -202,7 +202,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="OrderDateLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Date"/>
+        <Property name="text" type="java.lang.String" value="-"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="ReceiveDateDisplayLabel">
@@ -212,7 +212,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="ReceiveDateLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Date"/>
+        <Property name="text" type="java.lang.String" value="-"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="PaymentTypeDisplayLabel">
@@ -222,7 +222,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="PaymentTypeLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Payment Type"/>
+        <Property name="text" type="java.lang.String" value="-"/>
       </Properties>
     </Component>
     <Container class="javax.swing.JScrollPane" name="LineItemScrollPane">
@@ -261,7 +261,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="priceLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="$0.00"/>
+        <Property name="text" type="java.lang.String" value="-"/>
       </Properties>
     </Component>
   </SubComponents>

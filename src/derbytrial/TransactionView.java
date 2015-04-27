@@ -5,6 +5,7 @@
  */
 package derbytrial;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -117,19 +118,19 @@ public class TransactionView extends javax.swing.JFrame {
 
         NameDisplayLabel.setText("Customer/Vendor:");
 
-        NameLabel.setText("Name");
+        NameLabel.setText("-");
 
         OrderDateDisplayLabel.setText("Date of Order:");
 
-        OrderDateLabel.setText("Date");
+        OrderDateLabel.setText("-");
 
         ReceiveDateDisplayLabel.setText("Date to Receive: ");
 
-        ReceiveDateLabel.setText("Date");
+        ReceiveDateLabel.setText("-");
 
         PaymentTypeDisplayLabel.setText("Payment Method:");
 
-        PaymentTypeLabel.setText("Payment Type");
+        PaymentTypeLabel.setText("-");
 
         LineItems.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -157,7 +158,7 @@ public class TransactionView extends javax.swing.JFrame {
 
         jLabel1.setText("Total Price:");
 
-        priceLabel.setText("$0.00");
+        priceLabel.setText("-");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -247,8 +248,8 @@ public class TransactionView extends javax.swing.JFrame {
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(priceLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(LineItemScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 64, Short.MAX_VALUE)
+                .addComponent(LineItemScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 146, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(DeleteButton)
                     .addComponent(ExitButton))
@@ -273,6 +274,41 @@ public class TransactionView extends javax.swing.JFrame {
         isOpen = false;
     }//GEN-LAST:event_formWindowClosing
 
+    private void clearForm() {
+        //resets the form
+
+        if (OrderTypeList.getSelectedIndex() == 0) { //Sales selected
+
+            //clear JTable and set column names to sale_order_line
+            try (Statement stmt = conn.createStatement()) {
+                PreparedStatement temp = conn.prepareStatement("select * from PURCHASE_ORDER_LINE where 1 = 2");
+                LineItems.setModel(new JDBCTableModel(currentTable, temp));
+
+            } catch (SQLException s) {
+                System.err.println(s);
+            }
+
+        } else { //purchases selected
+            //clear JTable and set column names to purchase_order_line
+            try (Statement stmt = conn.createStatement()) {
+                PreparedStatement temp = conn.prepareStatement("select * from SALE_ORDER_LINE where 1 = 2");
+                LineItems.setModel(new JDBCTableModel(currentTable, temp));
+
+            } catch (SQLException s) {
+                System.err.println(s);
+            }
+        }
+
+        //clear labels
+        NameLabel.setText("-");
+        OrderDateLabel.setText("-");
+        PaymentTypeLabel.setText("-");
+        priceLabel.setText("-");
+        ReceiveDateLabel.setText("-");
+
+        OrderIDField.setText("");
+
+    }
     private void IDSubmitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IDSubmitButtonActionPerformed
         currentID = null;
         currentTable = null;
@@ -292,12 +328,16 @@ public class TransactionView extends javax.swing.JFrame {
                 NameLabel.setText(rs.getString(2));
                 OrderDateLabel.setText(rs.getDate(3).toString());
                 PaymentTypeLabel.setText(rs.getString(4));
-                ResultSet rs2 = stmt.executeQuery("select sum(COST) from SALE_ORDER_LINE where SALE_ID = " + saleID);
+
+                ResultSet rs2 = stmt.executeQuery("select sum(COST) COST_SUM from SALE_ORDER_LINE where SALE_ID = " + saleID);
+                BigDecimal total = new BigDecimal(0);
+                total.setScale(2);
+
                 if (rs2.next()) {
-                    priceLabel.setText("$" + rs2.getBigDecimal(1).toString());
-                } else {
-                    priceLabel.setText("$0.00");
+                    total = rs2.getBigDecimal("COST_SUM");
                 }
+
+                priceLabel.setText("$" + total.toString());
 
                 solPrep.setInt(1, saleID);
 
@@ -315,12 +355,16 @@ public class TransactionView extends javax.swing.JFrame {
                 NameLabel.setText(rs.getString(2));
                 OrderDateLabel.setText(rs.getDate(3).toString());
                 ReceiveDateLabel.setText(rs.getDate(4).toString());
-                ResultSet rs2 = stmt.executeQuery("select sum(COST) from PURCHASE_ORDER_LINE where PO_ID = " + purchaseID);
+
+                ResultSet rs2 = stmt.executeQuery("select sum(COST) COST_SUM from PURCHASE_ORDER_LINE where PO_ID = " + purchaseID);
+                BigDecimal total = new BigDecimal(0);
+                total.setScale(2);
+
                 if (rs2.next()) {
-                    priceLabel.setText("$" + rs2.getBigDecimal(1).toString());
-                } else {
-                    priceLabel.setText("$0.00");
+                    total = rs2.getBigDecimal("COST_SUM");
                 }
+
+                priceLabel.setText("$" + total.toString());
 
                 polPrep.setInt(1, purchaseID);
 
@@ -332,7 +376,7 @@ public class TransactionView extends javax.swing.JFrame {
         } catch (SQLException s) {
             System.err.println(s);
         } catch (NumberFormatException n) {
-
+            JOptionPane.showMessageDialog(this, "Error: ID can only be an integer.");
         }
     }//GEN-LAST:event_IDSubmitButtonActionPerformed
 
@@ -345,9 +389,9 @@ public class TransactionView extends javax.swing.JFrame {
                             + "FROM SALE_ORDER_LINE O "
                             + "WHERE S.STOCK_ID = O.STOCK_ID AND O.SALE_ID = " + currentID + "))"
                             + " WHERE S.STOCK_ID IN ("
-                                + "SELECT O.STOCK_ID "
-                                + "FROM SALE_ORDER_LINE O "
-                                + "WHERE SALE_ID = " + currentID + ")");
+                            + "SELECT O.STOCK_ID "
+                            + "FROM SALE_ORDER_LINE O "
+                            + "WHERE SALE_ID = " + currentID + ")");
                     stmt.executeUpdate("delete from SALE_ORDER_LINE where SALE_ID = " + currentID);
                     stmt.executeUpdate("delete from SALE where SALE_ID = " + currentID);
 
@@ -370,17 +414,17 @@ public class TransactionView extends javax.swing.JFrame {
                             + "FROM PURCHASE_ORDER_LINE P "
                             + "WHERE S.STOCK_ID = P.STOCK_ID AND P.PO_ID = " + currentID + "))"
                             + " WHERE S.STOCK_ID IN ("
-                                + "SELECT P.STOCK_ID "
-                                + "FROM PURCHASE_ORDER_LINE P "
-                                + "WHERE P.PO_ID = " + currentID + " AND P.RECEIVED = TRUE)");
+                            + "SELECT P.STOCK_ID "
+                            + "FROM PURCHASE_ORDER_LINE P "
+                            + "WHERE P.PO_ID = " + currentID + " AND P.RECEIVED = TRUE)");
                     stmt.execute("UPDATE STOCK S SET S.ON_ORDER = (S.ON_ORDER - "
                             + "(SELECT P.AMOUNT "
                             + "FROM PURCHASE_ORDER_LINE P "
                             + "WHERE S.STOCK_ID = P.STOCK_ID AND P.PO_ID = " + currentID + "))"
                             + " WHERE S.STOCK_ID IN ("
-                                + "SELECT P.STOCK_ID "
-                                + "FROM PURCHASE_ORDER_LINE P "
-                                + "WHERE P.PO_ID = " + currentID + " AND P.RECEIVED = FALSE)");
+                            + "SELECT P.STOCK_ID "
+                            + "FROM PURCHASE_ORDER_LINE P "
+                            + "WHERE P.PO_ID = " + currentID + " AND P.RECEIVED = FALSE)");
                     stmt.executeUpdate("delete from PURCHASE_ORDER_LINE where PO_ID = " + currentID);
                     stmt.executeUpdate("delete from PURCHASE_ORDER where PO_ID = " + currentID);
 
@@ -399,7 +443,10 @@ public class TransactionView extends javax.swing.JFrame {
                 }
             } catch (SQLException s) {
                 System.err.println(s);
-                try{conn.rollback();}catch(SQLException q){}
+                try {
+                    conn.rollback();
+                } catch (SQLException q) {
+                }
             }
         }
     }//GEN-LAST:event_DeleteButtonActionPerformed
@@ -410,7 +457,7 @@ public class TransactionView extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowActivated
 
     private void OrderTypeListItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_OrderTypeListItemStateChanged
-        // TODO add your handling code here:
+        clearForm();
         switch (evt.getItem().toString()) {
             case "Sales":
                 setSalesVisible(true);

@@ -1,11 +1,11 @@
 ----------------------------------------------------------------
-Mon Apr 27 14:21:16 CDT 2015:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.11.1.2 - (1629631): instance a816c00e-014c-fc53-8ee0-000007282370 
-on database directory C:\Users\Steven\Code\DerbyTrial\testdb with class loader sun.misc.Launcher$AppClassLoader@6d06d69c 
-Loaded from file:/C:/Users/Steven/Code/DerbyTrial/derby.jar
+Mon Apr 27 16:18:42 CDT 2015:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.11.1.2 - (1629631): instance a816c00e-014c-fcbf-0f59-00000eb32150 
+on database directory C:\Users\Alex\Documents\NetBeansProjects\DerbyTrial\testdb with class loader sun.misc.Launcher$AppClassLoader@6d06d69c 
+Loaded from file:/C:/Users/Alex/Documents/NetBeansProjects/DerbyTrial/derby.jar
 java.vendor=Oracle Corporation
-java.runtime.version=1.8.0_25-b18
-user.dir=C:\Users\Steven\Code\DerbyTrial
+java.runtime.version=1.8.0_31-b13
+user.dir=C:\Users\Alex\Documents\NetBeansProjects\DerbyTrial
 os.name=Windows 8.1
 os.arch=amd64
 os.version=6.3

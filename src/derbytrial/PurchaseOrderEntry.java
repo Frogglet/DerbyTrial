@@ -13,16 +13,15 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
 import java.sql.Connection;
-
-
+import java.util.ArrayList;
 
 public class PurchaseOrderEntry extends javax.swing.JFrame {
 
-private Connection conn;
+    private Connection conn;
 
     public PurchaseOrderEntry() {
         conn = MusicStoreLauncher.conn;
-        
+
         initComponents();
     }
 
@@ -124,7 +123,7 @@ private Connection conn;
                     .addComponent(POLabel)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 389, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 389, Short.MAX_VALUE)
                             .addComponent(CancelButton))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -145,7 +144,7 @@ private Connection conn;
                             .addComponent(VendorLabel)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(VendorIDField, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -166,10 +165,10 @@ private Connection conn;
                     .addComponent(DateReceiveLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(SubmitInfoButton)
@@ -186,8 +185,7 @@ private Connection conn;
 
     private void SubmitInfoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SubmitInfoButtonActionPerformed
 
-        
-        if (PurchaseTable.isEditing()){
+        if (PurchaseTable.isEditing()) {
             PurchaseTable.getCellEditor().stopCellEditing();
         }
 
@@ -215,23 +213,47 @@ private Connection conn;
 
             int purchaseID = rs.getInt(1);
             BigDecimal total = new BigDecimal(0);
+
+            ArrayList<Integer> prevStockID = new ArrayList<>();
             for (int i = 0; i < PurchaseTable.getRowCount(); i++) {
-                
+
                 int stockID = Integer.parseInt(PurchaseTable.getValueAt(i, 0).toString());
                 int amount = Integer.parseInt(PurchaseTable.getValueAt(i, 1).toString());
 
+                if (prevStockID.contains(stockID)) {
+                    JOptionPane.showMessageDialog(this, "Purchase cancelled: \nAll orders for a single stock must be on the same row.");
+                    try {
+                        conn.rollback();
+                    } catch (SQLException s) {
+                        System.err.println("Rollback failed.");
+                        System.err.println(s);
+                    }
+                    return;
+                }
+                prevStockID.add(stockID);
+
                 Statement tempStmt = conn.createStatement();
                 Statement addStatement = conn.createStatement();
-                ResultSet tempRs = tempStmt.executeQuery("select VENDOR_COST from STOCK where STOCK_ID = " + stockID);
+                ResultSet tempRs = tempStmt.executeQuery("select VENDOR_ID, VENDOR_COST from STOCK where STOCK_ID = " + stockID);
 
-                if (!tempRs.next()) {
-                    JOptionPane.showMessageDialog(this, "Stock ID not found!");
+                if (tempRs.next()) {
+                    if (vendorID != tempRs.getInt("VENDOR_ID")) {
+                        JOptionPane.showMessageDialog(this, "Purchase cancelled: \nVendor #" + vendorID + "does not sell stock #" + stockID + ".");
+                        try {
+                            conn.rollback();
+                        } catch (SQLException s) {
+                        }
+                        return;
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "Purchase cancelled: stock ID not found.");
                     try {
                         conn.rollback();
                     } catch (SQLException s) {
                     }
                     return;
                 }
+
                 BigDecimal price = tempRs.getBigDecimal(1);
                 BigDecimal subTotal = price.multiply(new BigDecimal(amount));
                 total = total.add(subTotal);
@@ -239,31 +261,31 @@ private Connection conn;
                 solPrep.setInt(1, purchaseID);
                 solPrep.setInt(2, stockID);
                 solPrep.setInt(3, amount);
-                solPrep.setBigDecimal(4, price);
+                solPrep.setBigDecimal(4, subTotal);
 
                 addStatement.execute("UPDATE STOCK SET ON_ORDER = (ON_ORDER + " + amount + ") WHERE STOCK_ID = " + stockID);
-                
+
                 solPrep.executeUpdate();
             }
 
             JOptionPane.showMessageDialog(this, "Purchase #" + purchaseID + " created for vendor #" + vendorID + "\nTotal price: " + total);
             conn.commit();
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Invalid insert operation: \nPlease check that your ID values are correct.");
+            JOptionPane.showMessageDialog(this, "Purchase cancelled: \nPlease check that your ID values are correct.");
             try {
                 conn.rollback();
             } catch (SQLException s) {
             }
             System.err.println(e);
         } catch (NumberFormatException n) {
-            JOptionPane.showMessageDialog(this, "Illegal values entered: \nPlease make sure only numbers are used for \nnumerical entries.");
+            JOptionPane.showMessageDialog(this, "Purchase cancelled: \nPlease make sure only numbers are used for \nnumerical entries.");
             try {
                 conn.rollback();
             } catch (SQLException s) {
             }
         } catch (IllegalArgumentException i) {
             //illegal date format
-            JOptionPane.showMessageDialog(this, "Illegal Date: \nPlease enter date in yyyy-mm-dd format.");
+            JOptionPane.showMessageDialog(this, "Purchase cancelled: \nPlease enter date in yyyy-mm-dd format.");
             try {
                 conn.rollback();
             } catch (SQLException s) {

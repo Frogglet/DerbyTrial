@@ -12,6 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 /**
@@ -231,18 +232,44 @@ public class SalesOrderEntry extends javax.swing.JFrame {
 
             int saleID = rs.getInt(1);
             BigDecimal total = new BigDecimal(0);
+
+            ArrayList<Integer> prevStockID = new ArrayList<>();
+
             for (int i = 0; i < OrderLineTable.getRowCount(); i++) {
                 System.out.println(OrderLineTable.getValueAt(i, 0).toString());
                 System.out.println(OrderLineTable.getValueAt(i, 1).toString());
                 int stockID = Integer.parseInt(OrderLineTable.getValueAt(i, 0).toString());
                 int amount = Integer.parseInt(OrderLineTable.getValueAt(i, 1).toString());
 
+                if (prevStockID.contains(stockID)) {
+                    JOptionPane.showMessageDialog(this, "Sale cancelled: All orders for a single \nstock must be on the same row.");
+                    try {
+                        conn.rollback();
+                    } catch (SQLException s) {
+                        System.err.println("Rollback failed.");
+                        System.err.println(s);
+                    }
+                    return;
+                }
+                prevStockID.add(stockID);
+
                 Statement tempStmt = conn.createStatement();
                 Statement addStatement = conn.createStatement();
-                ResultSet tempRs = tempStmt.executeQuery("select SALE_PRICE from STOCK where STOCK_ID = " + stockID);
+                ResultSet tempRs = tempStmt.executeQuery("select SALE_PRICE, AMOUNT from STOCK where STOCK_ID = " + stockID);
 
                 if (!tempRs.next()) {
-                    JOptionPane.showMessageDialog(this, "Stock ID not found!");
+                    JOptionPane.showMessageDialog(this, "Sale cancelled: stock ID not found.");
+                    try {
+                        conn.rollback();
+                    } catch (SQLException s) {
+                    }
+                    return;
+                }
+
+                int amountAvailable = tempRs.getInt("AMOUNT");
+
+                if (amount > amountAvailable) {
+                    JOptionPane.showMessageDialog(this, "Sale cancelled: not enough stock #" + stockID + " available.");
                     try {
                         conn.rollback();
                     } catch (SQLException s) {
@@ -256,31 +283,31 @@ public class SalesOrderEntry extends javax.swing.JFrame {
                 solPrep.setInt(1, saleID);
                 solPrep.setInt(2, stockID);
                 solPrep.setInt(3, amount);
-                solPrep.setBigDecimal(4, price);
+                solPrep.setBigDecimal(4, subTotal);
 
                 addStatement.execute("UPDATE STOCK SET AMOUNT = (AMOUNT - " + amount + ") WHERE STOCK_ID = " + stockID);
-                
+
                 solPrep.executeUpdate();
             }
 
             JOptionPane.showMessageDialog(this, "Sale #" + saleID + " created for customer #" + customerID + "\nTotal price: " + total);
             conn.commit();
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Invalid insert operation: \nPlease check that your ID values are correct.");
+            JOptionPane.showMessageDialog(this, "Sale cancelled: \nPlease check that your ID values are correct.");
             try {
                 conn.rollback();
             } catch (SQLException s) {
             }
             System.err.println(e);
         } catch (NumberFormatException n) {
-            JOptionPane.showMessageDialog(this, "Illegal values entered: \nPlease make sure only numbers are used for \nnumerical entries.");
+            JOptionPane.showMessageDialog(this, "Sale cancelled: \nPlease make sure only numbers are used for \nnumerical entries.");
             try {
                 conn.rollback();
             } catch (SQLException s) {
             }
         } catch (IllegalArgumentException i) {
             //illegal date format
-            JOptionPane.showMessageDialog(this, "Illegal Date: \nPlease enter date in yyyy-mm-dd format.");
+            JOptionPane.showMessageDialog(this, "Sale cancelled: \nPlease enter date in yyyy-mm-dd format.");
             try {
                 conn.rollback();
             } catch (SQLException s) {
