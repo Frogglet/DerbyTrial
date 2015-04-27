@@ -28,10 +28,10 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="LineItemScrollPane" pref="481" max="32767" attributes="0"/>
+                  <Component id="LineItemScrollPane" pref="484" max="32767" attributes="0"/>
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
@@ -69,11 +69,6 @@
                               <Component id="ReceiveDateLabel" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="ReceivedDisplayLabel" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="ReceivedLabel" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
                               <Component id="PaymentTypeDisplayLabel" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="PaymentTypeLabel" min="-2" max="-2" attributes="0"/>
@@ -88,6 +83,13 @@
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
+          </Group>
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
+              <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Component id="priceLabel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -122,19 +124,19 @@
                   <Component id="ReceiveDateDisplayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="ReceiveDateLabel" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="ReceivedDisplayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="ReceivedLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="PaymentTypeDisplayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="PaymentTypeLabel" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="jLabel1" alignment="3" min="-2" pref="14" max="-2" attributes="0"/>
+                  <Component id="priceLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="LineItemScrollPane" min="-2" pref="100" max="-2" attributes="0"/>
-              <EmptySpace pref="25" max="32767" attributes="0"/>
+              <EmptySpace pref="64" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="DeleteButton" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="ExitButton" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -203,16 +205,6 @@
         <Property name="text" type="java.lang.String" value="Date"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="ReceivedDisplayLabel">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Received?:"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JLabel" name="ReceivedLabel">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Yes/No"/>
-      </Properties>
-    </Component>
     <Component class="javax.swing.JLabel" name="ReceiveDateDisplayLabel">
       <Properties>
         <Property name="text" type="java.lang.String" value="Date to Receive: "/>
@@ -240,12 +232,7 @@
         <Component class="javax.swing.JTable" name="LineItems">
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-              <Table columnCount="4" rowCount="4">
-                <Column editable="true" title="Title 1" type="java.lang.Object"/>
-                <Column editable="true" title="Title 2" type="java.lang.Object"/>
-                <Column editable="true" title="Title 3" type="java.lang.Object"/>
-                <Column editable="true" title="Title 4" type="java.lang.Object"/>
-              </Table>
+              <Table columnCount="0" rowCount="0"/>
             </Property>
           </Properties>
         </Component>
@@ -266,6 +253,16 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ExitButtonActionPerformed"/>
       </Events>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabel1">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Total Price:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="priceLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="$0.00"/>
+      </Properties>
     </Component>
   </SubComponents>
 </Form>

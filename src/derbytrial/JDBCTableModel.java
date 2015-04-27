@@ -13,15 +13,17 @@ public class JDBCTableModel extends AbstractTableModel {
     Object[][] contents;
     String[] columnNames;
     Class[] columnClasses;
+    Connection conn;
 
-    public JDBCTableModel(Connection conn, String tableName, PreparedStatement prepStatement)
+    public JDBCTableModel(String tableName, PreparedStatement prepStatement)
             throws SQLException {
         super();
+        conn = MusicStoreLauncher.conn;
 
-        getTableContents(conn, tableName, prepStatement);
+        getTableContents(tableName, prepStatement);
     }
 
-    protected void getTableContents(Connection conn, String tableName,
+    protected void getTableContents(String tableName,
             PreparedStatement prepStatement) throws SQLException {
 
         // get metadata: what columns exist and what

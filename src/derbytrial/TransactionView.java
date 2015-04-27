@@ -5,46 +5,53 @@
  */
 package derbytrial;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Steven
  */
 public class TransactionView extends javax.swing.JFrame {
 
-    /**
-     * Creates new form TransactionView
-     */
+    Connection conn;
+    String currentTable = null;
+    Integer currentID = null;
+    String nullQuery = "select * from #table where 1 = 2";
+
     public TransactionView() {
+        conn = MusicStoreLauncher.conn;
         initComponents();
     }
 
     // The code below sets up a check to make sure duplicate windows don't open.
     private static boolean isOpen = false;
     // This makes the Purchase Order fields invisible
-    
-    
-    public static boolean getIsOpen(){
+
+    public static boolean getIsOpen() {
         return isOpen;
     }
-    
-    public static void setIsOpen(boolean set){
+
+    public static void setIsOpen(boolean set) {
         isOpen = set;
     }
-    
+
     // This class turns on/off the labels for Sales info
-    private void setSalesVisible(boolean set){
+    private void setSalesVisible(boolean set) {
         PaymentTypeDisplayLabel.setVisible(set);
         PaymentTypeLabel.setVisible(set);
     }
-    
+
     //This class turns on/off the labels for Purchasing info
-    private void setPurchaseVisible(boolean set){
+    private void setPurchaseVisible(boolean set) {
         ReceiveDateDisplayLabel.setVisible(set);
         ReceiveDateLabel.setVisible(set);
-        ReceivedDisplayLabel.setVisible(set);
-        ReceivedLabel.setVisible(set);
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -64,8 +71,6 @@ public class TransactionView extends javax.swing.JFrame {
         NameLabel = new javax.swing.JLabel();
         OrderDateDisplayLabel = new javax.swing.JLabel();
         OrderDateLabel = new javax.swing.JLabel();
-        ReceivedDisplayLabel = new javax.swing.JLabel();
-        ReceivedLabel = new javax.swing.JLabel();
         ReceiveDateDisplayLabel = new javax.swing.JLabel();
         ReceiveDateLabel = new javax.swing.JLabel();
         PaymentTypeDisplayLabel = new javax.swing.JLabel();
@@ -74,6 +79,8 @@ public class TransactionView extends javax.swing.JFrame {
         LineItems = new javax.swing.JTable();
         DeleteButton = new javax.swing.JButton();
         ExitButton = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        priceLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -116,10 +123,6 @@ public class TransactionView extends javax.swing.JFrame {
 
         OrderDateLabel.setText("Date");
 
-        ReceivedDisplayLabel.setText("Received?:");
-
-        ReceivedLabel.setText("Yes/No");
-
         ReceiveDateDisplayLabel.setText("Date to Receive: ");
 
         ReceiveDateLabel.setText("Date");
@@ -130,13 +133,10 @@ public class TransactionView extends javax.swing.JFrame {
 
         LineItems.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
         LineItemScrollPane.setViewportView(LineItems);
@@ -155,6 +155,10 @@ public class TransactionView extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setText("Total Price:");
+
+        priceLabel.setText("$0.00");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -162,7 +166,7 @@ public class TransactionView extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(LineItemScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 481, Short.MAX_VALUE)
+                    .addComponent(LineItemScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 484, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -192,10 +196,6 @@ public class TransactionView extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(ReceiveDateLabel))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(ReceivedDisplayLabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(ReceivedLabel))
-                            .addGroup(layout.createSequentialGroup()
                                 .addComponent(PaymentTypeDisplayLabel)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(PaymentTypeLabel)))
@@ -205,6 +205,12 @@ public class TransactionView extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(ExitButton)))
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(priceLabel)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -232,17 +238,17 @@ public class TransactionView extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(ReceiveDateDisplayLabel)
                     .addComponent(ReceiveDateLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(ReceivedDisplayLabel)
-                    .addComponent(ReceivedLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(11, 11, 11)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(PaymentTypeDisplayLabel)
                     .addComponent(PaymentTypeLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(priceLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(LineItemScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 64, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(DeleteButton)
                     .addComponent(ExitButton))
@@ -268,11 +274,110 @@ public class TransactionView extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosing
 
     private void IDSubmitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IDSubmitButtonActionPerformed
-        // TODO add your handling code here:
+        currentID = null;
+        currentTable = null;
+
+        String solQuery = "select * from SALE_ORDER_LINE where SALE_ID = ?";
+        String polQuery = "select * from PURCHASE_ORDER_LINE where PO_ID = ?";
+        try (Statement stmt = conn.createStatement();
+                PreparedStatement solPrep = conn.prepareStatement(solQuery);
+                PreparedStatement polPrep = conn.prepareStatement(polQuery)) {
+            if (OrderTypeList.getSelectedIndex() == 0) { //Sales selected
+                int saleID = Integer.parseInt(OrderIDField.getText());
+                ResultSet rs = stmt.executeQuery("select * from SALE where SALE_ID = " + saleID);
+                if (!rs.next()) {
+                    JOptionPane.showMessageDialog(this, "Sale #" + saleID + " could not be found.");
+                    return;
+                }
+                NameLabel.setText(rs.getString(2));
+                OrderDateLabel.setText(rs.getDate(3).toString());
+                PaymentTypeLabel.setText(rs.getString(4));
+                ResultSet rs2 = stmt.executeQuery("select sum(COST) from SALE_ORDER_LINE where SALE_ID = " + saleID);
+                if (rs2.next()) {
+                    priceLabel.setText("$" + rs2.getBigDecimal(1).toString());
+                } else {
+                    priceLabel.setText("$0.00");
+                }
+
+                solPrep.setInt(1, saleID);
+
+                LineItems.setModel(new JDBCTableModel("SALE_ORDER_LINE", solPrep));
+                currentID = saleID;
+                currentTable = "SALE";
+
+            } else { //Purchases selected
+                int purchaseID = Integer.parseInt(OrderIDField.getText());
+                ResultSet rs = stmt.executeQuery("select * from PURCHASE_ORDER where PO_ID = " + purchaseID);
+                if (!rs.next()) {
+                    JOptionPane.showMessageDialog(this, "Purchase Order #" + purchaseID + " could not be found.");
+                    return;
+                }
+                NameLabel.setText(rs.getString(2));
+                OrderDateLabel.setText(rs.getDate(3).toString());
+                ReceiveDateLabel.setText(rs.getDate(4).toString());
+                ResultSet rs2 = stmt.executeQuery("select sum(COST) from PURCHASE_ORDER_LINE where PO_ID = " + purchaseID);
+                if (rs2.next()) {
+                    priceLabel.setText("$" + rs2.getBigDecimal(1).toString());
+                } else {
+                    priceLabel.setText("$0.00");
+                }
+
+                polPrep.setInt(1, purchaseID);
+
+                LineItems.setModel(new JDBCTableModel("PURCHASE_ORDER_LINE", polPrep));
+
+                currentID = purchaseID;
+                currentTable = "PURCHASE_ORDER";
+            }
+        } catch (SQLException s) {
+            System.err.println(s);
+        } catch (NumberFormatException n) {
+
+        }
     }//GEN-LAST:event_IDSubmitButtonActionPerformed
 
     private void DeleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteButtonActionPerformed
-        // TODO add your handling code here:
+        if (currentTable != null && currentID != null) {
+            try (Statement stmt = conn.createStatement()) {
+                if (currentTable.equals("SALE")) {
+                    stmt.executeUpdate("delete from SALE_ORDER_LINE where SALE_ID = " + currentID);
+                    stmt.executeUpdate("delete from SALE where SALE_ID = " + currentID);
+
+                    PreparedStatement temp = conn.prepareStatement("select * from SALE_ORDER_LINE where 1 = 2");
+
+                    LineItems.setModel(new JDBCTableModel(currentTable, temp));
+
+                    NameLabel.setText("-");
+                    OrderDateLabel.setText("-");
+                    PaymentTypeLabel.setText("-");
+                    priceLabel.setText("-");
+
+                    JOptionPane.showMessageDialog(this, "Sale #" + currentID + " deleted.");
+                    currentTable = null;
+                    currentID = null;
+                    conn.commit();
+                } else {
+                    stmt.executeUpdate("delete from PURCHASE_ORDER_LINE where PO_ID = " + currentID);
+                    stmt.executeUpdate("delete from PURCHASE_ORDER where PO_ID = " + currentID);
+
+                    PreparedStatement temp = conn.prepareStatement("select * from PURCHASE_ORDER_LINE where 1 = 2");
+                    LineItems.setModel(new JDBCTableModel(currentTable, temp));
+
+                    NameLabel.setText("-");
+                    OrderDateLabel.setText("-");
+                    ReceiveDateLabel.setText("-");
+                    priceLabel.setText("-");
+
+                    JOptionPane.showMessageDialog(this, "Purchase Order #" + currentID + " deleted.");
+                    currentTable = null;
+                    currentID = null;
+                    conn.commit();
+                }
+            } catch (SQLException s) {
+                System.err.println(s);
+                try{conn.rollback();}catch(SQLException q){}
+            }
+        }
     }//GEN-LAST:event_DeleteButtonActionPerformed
 
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
@@ -282,7 +387,7 @@ public class TransactionView extends javax.swing.JFrame {
 
     private void OrderTypeListItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_OrderTypeListItemStateChanged
         // TODO add your handling code here:
-        switch (evt.getItem().toString()){
+        switch (evt.getItem().toString()) {
             case "Sales":
                 setSalesVisible(true);
                 setPurchaseVisible(false);
@@ -349,8 +454,8 @@ public class TransactionView extends javax.swing.JFrame {
     private javax.swing.JLabel PaymentTypeLabel;
     private javax.swing.JLabel ReceiveDateDisplayLabel;
     private javax.swing.JLabel ReceiveDateLabel;
-    private javax.swing.JLabel ReceivedDisplayLabel;
-    private javax.swing.JLabel ReceivedLabel;
     private javax.swing.JLabel TransactionViewLabel;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel priceLabel;
     // End of variables declaration//GEN-END:variables
 }

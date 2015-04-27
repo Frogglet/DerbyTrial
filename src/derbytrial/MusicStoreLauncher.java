@@ -487,12 +487,12 @@ public class MusicStoreLauncher {
                 = "create table STOCK ("
                 + "STOCK_ID int NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), "
                 + "ALBUM_ID int NOT NULL, "
-                + "FORMAT varchar(45), NOT NULL"
+                + "FORMAT varchar(45) NOT NULL, "
                 + "VENDOR_ID int NOT NULL,"
-                + "SALE_PRICE decimal(10,2), NOT NULL"
-                + "AMOUNT int, NOT NULL"
-                + "ON_ORDER int, NOT NULL"
-                + "VENDOR_COST decimal(10,2), NOT NULL"
+                + "SALE_PRICE decimal(10,2) NOT NULL, "
+                + "AMOUNT int NOT NULL, "
+                + "ON_ORDER int NOT NULL, "
+                + "VENDOR_COST decimal(10,2) NOT NULL, "
                 + "PRIMARY KEY (STOCK_ID),"
                 + "FOREIGN KEY (ALBUM_ID) REFERENCES ALBUM (ALBUM_ID))";
         stmt.executeUpdate(createString);

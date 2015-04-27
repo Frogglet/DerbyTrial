@@ -310,7 +310,7 @@ public class SearchWindow extends javax.swing.JFrame {
                 }
             }
 
-            newModel = new JDBCTableModel(MusicStoreLauncher.conn, tableName, prepStatement);
+            newModel = new JDBCTableModel(tableName, prepStatement);
             ResultsTable.setModel(newModel);
 
         } catch (SQLException ex) {
