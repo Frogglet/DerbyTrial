@@ -1,6 +1,6 @@
 ----------------------------------------------------------------
-Mon Apr 27 16:18:42 CDT 2015:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.11.1.2 - (1629631): instance a816c00e-014c-fcbf-0f59-00000eb32150 
+Mon Apr 27 16:42:24 CDT 2015:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.11.1.2 - (1629631): instance a816c00e-014c-fcd4-c399-00000eb3b4b0 
 on database directory C:\Users\Alex\Documents\NetBeansProjects\DerbyTrial\testdb with class loader sun.misc.Launcher$AppClassLoader@6d06d69c 
 Loaded from file:/C:/Users/Alex/Documents/NetBeansProjects/DerbyTrial/derby.jar
 java.vendor=Oracle Corporation
