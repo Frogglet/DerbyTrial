@@ -141,13 +141,8 @@
       <SubComponents>
         <Component class="javax.swing.JTable" name="OrderLineTable">
           <Properties>
-            <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-              <Table columnCount="4" rowCount="4">
-                <Column editable="true" title="Title 1" type="java.lang.Object"/>
-                <Column editable="true" title="Title 2" type="java.lang.Object"/>
-                <Column editable="true" title="Title 3" type="java.lang.Object"/>
-                <Column editable="true" title="Title 4" type="java.lang.Object"/>
-              </Table>
+            <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="new LineTableModel(&quot;Stock ID&quot;,&quot;Amount&quot;)" type="code"/>
             </Property>
           </Properties>
         </Component>
@@ -184,11 +179,17 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Add Row"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="AddRowButtonActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="ClearRowsButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="Clear Rows"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ClearRowsButtonActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

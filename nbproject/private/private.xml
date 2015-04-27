@@ -5,7 +5,10 @@
         <group>
             <file>file:/C:/Users/Alex/Documents/NetBeansProjects/DerbyTrial/src/derbytrial/MusicStoreLauncher.java</file>
             <file>file:/C:/Users/Alex/Documents/NetBeansProjects/DerbyTrial/src/derbytrial/DummyDataCreator.java</file>
+            <file>file:/C:/Users/Alex/Documents/NetBeansProjects/DerbyTrial/src/derbytrial/SalesOrderEntry.java</file>
+            <file>file:/C:/Users/Alex/Documents/NetBeansProjects/DerbyTrial/src/derbytrial/PurchaseOrderEntry.java</file>
             <file>file:/C:/Users/Alex/Documents/NetBeansProjects/DerbyTrial/src/derbytrial/JDBCTableModel.java</file>
+            <file>file:/C:/Users/Alex/Documents/NetBeansProjects/DerbyTrial/src/derbytrial/LineTableModel.java</file>
             <file>file:/C:/Users/Alex/Documents/NetBeansProjects/DerbyTrial/src/derbytrial/MasterMenu.java</file>
             <file>file:/C:/Users/Alex/Documents/NetBeansProjects/DerbyTrial/src/derbytrial/SearchWindow.java</file>
             <file>file:/C:/Users/Alex/Documents/NetBeansProjects/DerbyTrial/src/derbytrial/InfoEntry.java</file>

@@ -5,30 +5,39 @@
  */
 package derbytrial;
 
+import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Steven
  */
 public class SalesOrderEntry extends javax.swing.JFrame {
 
-    /**
-     * Creates new form SalesOrderEntry
-     */
+    Connection conn;
+
     public SalesOrderEntry() {
+        conn = MusicStoreLauncher.conn;
         initComponents();
     }
 
     // The code below sets up a check to make sure duplicate windows don't open.
     private static boolean isOpen = false;
-    
-    public static boolean getIsOpen(){
+
+    public static boolean getIsOpen() {
         return isOpen;
     }
-    
-    public static void setIsOpen(boolean set){
+
+    public static void setIsOpen(boolean set) {
         isOpen = set;
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -71,17 +80,7 @@ public class SalesOrderEntry extends javax.swing.JFrame {
 
         CustomerIDLabel.setText("Customer ID: ");
 
-        OrderLineTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
+        OrderLineTable.setModel(new LineTableModel("Stock ID","Amount"));
         jScrollPane1.setViewportView(OrderLineTable);
 
         StockLineLabel.setText("Stock Items (Stock ID, Amount)");
@@ -101,8 +100,18 @@ public class SalesOrderEntry extends javax.swing.JFrame {
         });
 
         AddRowButton.setText("Add Row");
+        AddRowButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AddRowButtonActionPerformed(evt);
+            }
+        });
 
         ClearRowsButton.setText("Clear Rows");
+        ClearRowsButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ClearRowsButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -194,8 +203,97 @@ public class SalesOrderEntry extends javax.swing.JFrame {
     }//GEN-LAST:event_CancelButtonActionPerformed
 
     private void SubmitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SubmitButtonActionPerformed
-        // TODO add your handling code here:
+        if (OrderLineTable.isEditing()) {
+            OrderLineTable.getCellEditor().stopCellEditing();
+        }
+
+        String addOrderQuery = "insert into SALE(CUSTOMER_ID, DATE, PAY_METHOD) values(?,?,?)";
+        String addLineQuery = "insert into SALE_ORDER_LINE values(?,?,?,?)";
+
+        try (PreparedStatement salePrep = conn.prepareStatement(addOrderQuery, Statement.RETURN_GENERATED_KEYS);
+                PreparedStatement solPrep = conn.prepareStatement(addLineQuery)) {
+            int customerID = Integer.parseInt(CustomerIDField.getText());
+            salePrep.setInt(1, customerID);
+            salePrep.setDate(2, Date.valueOf(DateField.getText()));
+            salePrep.setString(3, PaymentMethodField.getText());
+            salePrep.execute();
+
+            ResultSet rs = salePrep.getGeneratedKeys();
+            if (!rs.next()) {
+                JOptionPane.showMessageDialog(this, "Unexpected error: unable to retreive sale key.");
+                try {
+                    conn.rollback();
+                } catch (SQLException s) {
+                }
+
+                return;
+            }
+
+            int saleID = rs.getInt(1);
+            BigDecimal total = new BigDecimal(0);
+            for (int i = 0; i < OrderLineTable.getRowCount(); i++) {
+                System.out.println(OrderLineTable.getValueAt(i, 0).toString());
+                System.out.println(OrderLineTable.getValueAt(i, 1).toString());
+                int stockID = Integer.parseInt(OrderLineTable.getValueAt(i, 0).toString());
+                int amount = Integer.parseInt(OrderLineTable.getValueAt(i, 1).toString());
+
+                Statement tempStmt = conn.createStatement();
+                ResultSet tempRs = tempStmt.executeQuery("select SALE_PRICE from STOCK where STOCK_ID = " + stockID);
+
+                if (!tempRs.next()) {
+                    JOptionPane.showMessageDialog(this, "Stock ID not found!");
+                    try {
+                        conn.rollback();
+                    } catch (SQLException s) {
+                    }
+                    return;
+                }
+                BigDecimal price = tempRs.getBigDecimal(1);
+                BigDecimal subTotal = price.multiply(new BigDecimal(amount));
+                total = total.add(subTotal);
+
+                solPrep.setInt(1, saleID);
+                solPrep.setInt(2, stockID);
+                solPrep.setInt(3, amount);
+                solPrep.setBigDecimal(4, price);
+
+                solPrep.executeUpdate();
+            }
+
+            JOptionPane.showMessageDialog(this, "Sale #" + saleID + " created for customer #" + customerID + "\nTotal price: " + total);
+            conn.commit();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Invalid insert operation: \nPlease check that your ID values are correct.");
+            try {
+                conn.rollback();
+            } catch (SQLException s) {
+            }
+            System.err.println(e);
+        } catch (NumberFormatException n) {
+            JOptionPane.showMessageDialog(this, "Illegal values entered: \nPlease make sure only numbers are used for \nnumerical entries.");
+            try {
+                conn.rollback();
+            } catch (SQLException s) {
+            }
+        } catch (IllegalArgumentException i) {
+            //illegal date format
+            JOptionPane.showMessageDialog(this, "Illegal Date: \nPlease enter date in yyyy-mm-dd format.");
+            try {
+                conn.rollback();
+            } catch (SQLException s) {
+            }
+        }
     }//GEN-LAST:event_SubmitButtonActionPerformed
+
+    private void AddRowButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddRowButtonActionPerformed
+        LineTableModel model = (LineTableModel) OrderLineTable.getModel();
+        model.addRow();
+    }//GEN-LAST:event_AddRowButtonActionPerformed
+
+    private void ClearRowsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ClearRowsButtonActionPerformed
+        LineTableModel model = (LineTableModel) OrderLineTable.getModel();
+        model.clearRows();
+    }//GEN-LAST:event_ClearRowsButtonActionPerformed
 
     /**
      * @param args the command line arguments

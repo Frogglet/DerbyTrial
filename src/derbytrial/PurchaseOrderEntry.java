@@ -5,27 +5,35 @@
  */
 package derbytrial;
 
-/**
- *
- * @author Steven
- */
+import java.math.BigDecimal;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
+import java.sql.Connection;
+
+
+
 public class PurchaseOrderEntry extends javax.swing.JFrame {
 
-    /**
-     * Creates new form PurchaseOrderEntry
-     */
+private Connection conn;
+
     public PurchaseOrderEntry() {
+        conn = MusicStoreLauncher.conn;
+        
         initComponents();
     }
-    
+
     // The code below sets up a check to make sure duplicate windows don't open.
     private static boolean isOpen = false;
-    
-    public static boolean getIsOpen(){
+
+    public static boolean getIsOpen() {
         return isOpen;
     }
-    
-    public static void setIsOpen(boolean set){
+
+    public static void setIsOpen(boolean set) {
         isOpen = set;
     }
 
@@ -40,7 +48,7 @@ public class PurchaseOrderEntry extends javax.swing.JFrame {
 
         POLabel = new javax.swing.JLabel();
         VendorLabel = new javax.swing.JLabel();
-        VendorEntry = new javax.swing.JTextField();
+        VendorIDField = new javax.swing.JTextField();
         DateOrderedLabel = new javax.swing.JLabel();
         DateOrderedEntry = new javax.swing.JTextField();
         DateReceiveLabel = new javax.swing.JLabel();
@@ -87,17 +95,7 @@ public class PurchaseOrderEntry extends javax.swing.JFrame {
 
         jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
-        PurchaseTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
+        PurchaseTable.setModel(new LineTableModel("Stock ID", "Amount"));
         jScrollPane1.setViewportView(PurchaseTable);
 
         jLabel1.setText("Stock Items (Stock ID, Amount)");
@@ -113,35 +111,31 @@ public class PurchaseOrderEntry extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(POLabel)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(VendorLabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(VendorEntry, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(POLabel)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 389, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(CancelButton))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(SubmitInfoButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(ClearRowsButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(AddRowButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(DateOrderedLabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(DateOrderedEntry, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(DateReceiveLabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(DateReceiveEntry, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel1))
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 389, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(CancelButton))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(SubmitInfoButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(ClearRowsButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(AddRowButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(jLabel1)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                            .addComponent(DateReceiveLabel)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(DateReceiveEntry))
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(DateOrderedLabel)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(DateOrderedEntry))
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                            .addComponent(VendorLabel)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(VendorIDField, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -151,7 +145,7 @@ public class PurchaseOrderEntry extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(VendorLabel)
-                    .addComponent(VendorEntry, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(VendorIDField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(14, 14, 14)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(DateOrderedLabel)
@@ -181,7 +175,87 @@ public class PurchaseOrderEntry extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void SubmitInfoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SubmitInfoButtonActionPerformed
-        // TODO add your handling code here:
+
+        
+        if (PurchaseTable.isEditing()){
+            PurchaseTable.getCellEditor().stopCellEditing();
+        }
+
+        String addOrderQuery = "insert into PURCHASE_ORDER(VENDOR_ID, ORDER_DATE, DATE_TO_RECEIVE) values(?,?,?)";
+        String addLineQuery = "insert into PURCHASE_ORDER_LINE values(?,?,?,?, FALSE)";
+
+        try (PreparedStatement salePrep = conn.prepareStatement(addOrderQuery, Statement.RETURN_GENERATED_KEYS);
+                PreparedStatement solPrep = conn.prepareStatement(addLineQuery)) {
+            int vendorID = Integer.parseInt(VendorIDField.getText());
+            salePrep.setInt(1, vendorID);
+            salePrep.setDate(2, Date.valueOf(DateOrderedEntry.getText()));
+            salePrep.setDate(3, Date.valueOf(DateReceiveEntry.getText()));
+            salePrep.execute();
+
+            ResultSet rs = salePrep.getGeneratedKeys();
+            if (!rs.next()) {
+                JOptionPane.showMessageDialog(this, "Unexpected error: unable to retreive purchase key.");
+                try {
+                    conn.rollback();
+                } catch (SQLException s) {
+                }
+
+                return;
+            }
+
+            int purchaseID = rs.getInt(1);
+            BigDecimal total = new BigDecimal(0);
+            for (int i = 0; i < PurchaseTable.getRowCount(); i++) {
+                
+                int stockID = Integer.parseInt(PurchaseTable.getValueAt(i, 0).toString());
+                int amount = Integer.parseInt(PurchaseTable.getValueAt(i, 1).toString());
+
+                Statement tempStmt = conn.createStatement();
+                ResultSet tempRs = tempStmt.executeQuery("select VENDOR_COST from STOCK where STOCK_ID = " + stockID);
+
+                if (!tempRs.next()) {
+                    JOptionPane.showMessageDialog(this, "Stock ID not found!");
+                    try {
+                        conn.rollback();
+                    } catch (SQLException s) {
+                    }
+                    return;
+                }
+                BigDecimal price = tempRs.getBigDecimal(1);
+                BigDecimal subTotal = price.multiply(new BigDecimal(amount));
+                total = total.add(subTotal);
+
+                solPrep.setInt(1, purchaseID);
+                solPrep.setInt(2, stockID);
+                solPrep.setInt(3, amount);
+                solPrep.setBigDecimal(4, price);
+
+                solPrep.executeUpdate();
+            }
+
+            JOptionPane.showMessageDialog(this, "Purchase #" + purchaseID + " created for vendor #" + vendorID + "\nTotal price: " + total);
+            conn.commit();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Invalid insert operation: \nPlease check that your ID values are correct.");
+            try {
+                conn.rollback();
+            } catch (SQLException s) {
+            }
+            System.err.println(e);
+        } catch (NumberFormatException n) {
+            JOptionPane.showMessageDialog(this, "Illegal values entered: \nPlease make sure only numbers are used for \nnumerical entries.");
+            try {
+                conn.rollback();
+            } catch (SQLException s) {
+            }
+        } catch (IllegalArgumentException i) {
+            //illegal date format
+            JOptionPane.showMessageDialog(this, "Illegal Date: \nPlease enter date in yyyy-mm-dd format.");
+            try {
+                conn.rollback();
+            } catch (SQLException s) {
+            }
+        }
     }//GEN-LAST:event_SubmitInfoButtonActionPerformed
 
     private void CancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelButtonActionPerformed
@@ -245,7 +319,7 @@ public class PurchaseOrderEntry extends javax.swing.JFrame {
     private javax.swing.JLabel POLabel;
     private javax.swing.JTable PurchaseTable;
     private javax.swing.JButton SubmitInfoButton;
-    private javax.swing.JTextField VendorEntry;
+    private javax.swing.JTextField VendorIDField;
     private javax.swing.JLabel VendorLabel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
