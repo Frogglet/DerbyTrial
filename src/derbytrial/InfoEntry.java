@@ -14,8 +14,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
-import java.text.ParseException;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
 /**
  *
@@ -24,14 +24,16 @@ import javax.swing.JOptionPane;
 public class InfoEntry extends javax.swing.JFrame {
 
     Connection conn;
+    private JTextField[] allFields;
 
     public InfoEntry() {
         conn = MusicStoreLauncher.conn;
-
         initComponents();
+        JTextField[] temp = {AlbumIDField, AlbumNameField, ArtistIDField, ArtistNameField, ContactNameField, ContactNumberField, CustomerCityField, CustomerNameField, CustomerStreetField, CustomerZIPField, GenreField, PhoneNumberField, ReleaseDateField, SongNameField, StockAlbumIDField, StockCostField, StockPriceField, StockVendorIDField, VendorCityField, VendorNameField, VendorStreetField, VendorZIPField};
+        allFields = temp;
     }
 
-    // The code below sets up a check to make sure duplicate windows don't open.
+// The code below sets up a check to make sure duplicate windows don't open.
     private static boolean isOpen = false;
 
     public static boolean getIsOpen() {
@@ -552,7 +554,16 @@ public class InfoEntry extends javax.swing.JFrame {
 
     private void SubmitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SubmitButtonActionPerformed
         // TODO add your handling code here:
-
+        String[] customerFields = {CustomerNameField.getText(), CustomerStreetField.getText(), PhoneNumberField.getText(), CustomerCityField.getText(), CustomerStateList.getSelectedItem().toString(), CustomerZIPField.getText()};
+        String[] artistFields = {ArtistNameField.getText()};
+        String[] albumFields = {AlbumNameField.getText(), ReleaseDateField.getText(), GenreField.getText(), ArtistIDField.getText()};
+        String[] songFields = {SongNameField.getText(), AlbumIDField.getText()};
+        String[] stockFields = {StockAlbumIDField.getText(), FormatList.getSelectedItem().toString(), StockVendorIDField.getText(), StockPriceField.getText(), "0", "0", StockCostField.getText()};
+        String[] vendorFields = {VendorNameField.getText(), VendorStreetField.getText(), ContactNameField.getText(), ContactNumberField.getText(), VendorCityField.getText(), VendorStateList.getSelectedItem().toString(), VendorZIPField.getText()};
+        for (JTextField field : allFields) {
+            field.setText("");
+        }
+        
         try {
             String[] fieldText = null;
             String tableName = null;
@@ -560,34 +571,49 @@ public class InfoEntry extends javax.swing.JFrame {
             switch (InfoTabs.getSelectedIndex()) {
                 case 0:
                     // get Artist field info and update
-                    String[] artistFields = {ArtistNameField.getText()};
+
                     fieldText = artistFields;
                     tableName = "ARTIST";
                     query = "insert into ARTIST(ARTIST_NAME) ";
                     break;
                 case 1:
                     // get Album info and update
-                    String[] albumFields = {AlbumNameField.getText(), ReleaseDateField.getText(), GenreField.getText(), ArtistIDField.getText()};
                     fieldText = albumFields;
                     tableName = "ALBUM";
                     query = "insert into ALBUM(ALBUM_NAME,RELEASE_DATE,GENRE,ARTIST_ID) ";
                     break;
                 case 2:
                     // get Song info and update
-                    String[] songFields = {SongNameField.getText(), AlbumIDField.getText()};
-                    fieldText = songFields;
+
+                    PreparedStatement temp = conn.prepareStatement("SELECT ARTIST_ID FROM ALBUM WHERE ALBUM_ID = ?");
+                    temp.setInt(1, Integer.parseInt(songFields[1].trim()));
+                    ResultSet rs = temp.executeQuery();
+                    if (rs.next()) {
+                        String[] tempArray = {songFields[0], songFields[1], "" + rs.getInt(1)};
+                        fieldText = tempArray;
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Error: Album ID not valid");
+                        return;
+                    }
                     tableName = "SONG";
-                    query = "insert into SONG(SONG_NAME,ALBUM_ID) ";
+                    query = "insert into SONG(SONG_NAME,ALBUM_ID, ARTIST_ID) ";
                     break;
                 case 3:
-                    String[] stockFields = {AlbumIDField.getText(), FormatList.getSelectedItem().toString(), StockVendorIDLabel.getText(), StockPriceField.getText(), "0", "0", StockCostField.getText()};
+                    PreparedStatement isValid = conn.prepareStatement("SELECT ? IN (ALBUM_ID) FROM STOCK");
+                    isValid.setInt(1, Integer.parseInt(stockFields[0].trim()));
+                    ResultSet validRs = isValid.executeQuery();
+                    validRs.next();
+                    if (validRs.getBoolean(1)) {
+                        JOptionPane.showMessageDialog(this, "Error: Album ID already stocked.");
+                        return;
+                    }
+
                     fieldText = stockFields;
                     tableName = "STOCK";
                     query = "insert into STOCK(ALBUM_ID,FORMAT,VENDOR_ID,SALE_PRICE,AMOUNT,ON_ORDER,VENDOR_COST) ";
                     // get Stock info and update
                     break;
                 case 4:
-                    String[] vendorFields = {VendorNameField.getText(), VendorStreetField.getText(), ContactNameField.getText(), ContactNumberField.getText(), VendorCityField.getText(), VendorStateList.getSelectedItem().toString(), VendorZIPField.getText()};
                     fieldText = vendorFields;
                     tableName = "VENDOR";
                     query = "insert into VENDOR(VENDOR_NAME,ADDRESS,CONTACT_NAME,CONTACT_NUMBER,CITY,STATE,ZIP) ";
@@ -595,7 +621,6 @@ public class InfoEntry extends javax.swing.JFrame {
                     break;
                 case 5:
                     // get Customer info and update
-                    String[] customerFields = {CustomerNameField.getText(), CustomerStreetField.getText(), PhoneNumberField.getText(), CustomerCityField.getText(), CustomerStateList.getSelectedItem().toString(), CustomerZIPField.getText()};
                     fieldText = customerFields;
                     tableName = "CUSTOMER";
                     query = "insert into CUSTOMER(NAME,ADDRESS,CONTACT_NUMBER,CITY,STATE,ZIP) ";
@@ -624,16 +649,24 @@ public class InfoEntry extends javax.swing.JFrame {
 
             for (int i = 0; i < fieldText.length; i++) {
                 rs.next();
+                if (rs.getInt("NULLABLE") == DatabaseMetaData.columnNoNulls && fieldText[i].isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Error: " + rs.getString("COLUMN_NAME") + " cannot be blank.");
+                    return;
+                }
                 int colType = rs.getInt("DATA_TYPE");
                 switch (colType) {
                     case Types.INTEGER:
+                        System.out.println("bob");
                         prepStmt.setInt(i + 1, Integer.parseInt(fieldText[i]));
+                        System.out.println("dylan");
                         break;
                     case Types.DATE:
                         prepStmt.setDate(i + 1, Date.valueOf(fieldText[i]));
                         break;
                     case Types.DECIMAL:
+                        System.out.println("here");
                         prepStmt.setBigDecimal(i + 1, new BigDecimal(fieldText[i]));
+                        System.out.println("there");
                         break;
                     case Types.CHAR:
                     case Types.LONGNVARCHAR:
@@ -655,7 +688,6 @@ public class InfoEntry extends javax.swing.JFrame {
 
             ResultSet generatedKeys = prepStmt.getGeneratedKeys();
             if (generatedKeys.next()) {
-
                 JOptionPane.showMessageDialog(this, "ID for inserted record is: " + generatedKeys.getLong(1));
             } else {
                 JOptionPane.showMessageDialog(this, "Unexpected Error: ID retreival failed");
@@ -687,16 +719,21 @@ public class InfoEntry extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(InfoEntry.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(InfoEntry.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(InfoEntry.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(InfoEntry.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(InfoEntry.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(InfoEntry.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(InfoEntry.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(InfoEntry.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
@@ -771,4 +808,5 @@ public class InfoEntry extends javax.swing.JFrame {
     private javax.swing.JLabel VendorZIPLabel;
     private javax.swing.JButton jButton1;
     // End of variables declaration//GEN-END:variables
+
 }
