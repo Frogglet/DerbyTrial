@@ -136,7 +136,9 @@ public class Receiving extends javax.swing.JFrame {
             LineCount = CountOrderLines(IDValue); //Run method to count how many Purchase Order Lines for that PO have not been received.
             if (LineCount <= 0){
                 // put up a JDialogue that no items are in purchase order
-                JOptionPane.showMessageDialog(rootPane, "No items to receive in this order");
+                if (Success){
+                    JOptionPane.showMessageDialog(rootPane, "No items to receive in this order");
+                }
                 //System.out.println("No items to receive in this order");
                 return;
             }
@@ -160,7 +162,7 @@ public class Receiving extends javax.swing.JFrame {
             if (Success) {
                 //print out JDialogue that items were received.
                 JOptionPane.showMessageDialog(rootPane, LineCount + " items have been updated under PO " + IDValue);
-                System.out.println("Stuff should have been updated");
+                //System.out.println("Stuff should have been updated");
             }
             
         }
@@ -182,6 +184,9 @@ public class Receiving extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(Receiving.class.getName()).log(Level.SEVERE, null, ex);
             Success = false;
+        } catch (NumberFormatException e){
+            Success = false;
+            JOptionPane.showMessageDialog(rootPane, "Please only enter numbers in field");
         }
 
         return LC;
