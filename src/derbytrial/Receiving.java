@@ -5,16 +5,34 @@
  */
 package derbytrial;
 
+    import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 /**
  *
  * @author Steven
  */
 public class Receiving extends javax.swing.JFrame {
 
+    // Steven Variable Declaration
+    private String IDValue;
+    private int LineCount = 0;
+    private String Query = null;
+    ResultSet Result;
+    Connection conn;
+    Statement statement;
+    boolean Success;
     /**
      * Creates new form Receiving
      */
     public Receiving() {
+        conn = MusicStoreLauncher.conn;
+        try {
+            statement = conn.createStatement();
+        } catch (SQLException ex) {
+            Logger.getLogger(Receiving.class.getName()).log(Level.SEVERE, null, ex);
+        }
         initComponents();
     }
 
@@ -110,8 +128,106 @@ public class Receiving extends javax.swing.JFrame {
 
     private void ReceiveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ReceiveButtonActionPerformed
         // TODO add your handling code here:
+        Success = true;  //defines a test variable that prevents committing changes if ever false
+        IDValue = PurchaseOrderIDField.getText(); //sets IDValue to value in text box
+        
+        
+        if (IDValue instanceof String && !(IDValue.isEmpty())){ //If IDValue isn't empty
+            LineCount = CountOrderLines(IDValue); //Run method to count how many Purchase Order Lines for that PO have not been received.
+            if (LineCount <= 0){
+                // put up a JDialogue that no items are in purchase order
+                JOptionPane.showMessageDialog(rootPane, "No items to receive in this order");
+                //System.out.println("No items to receive in this order");
+                return;
+            }
+            
+            UpdateAmounts(IDValue); // method to add and subtract Line Amounts from the Stock Amount and On order fields
+            
+            if (Success){
+                UpdateReceived(IDValue); // method to change Received to True for all lines under POID
+            } else return;
+            
+            if (Success){
+                try {
+                    conn.commit();
+                } catch (SQLException ex) {
+                    Logger.getLogger(Receiving.class.getName()).log(Level.SEVERE, null, ex);
+                    Success = false;
+                    JOptionPane.showMessageDialog(rootPane, "Something bad happened, changes did not commit");
+                }
+            }
+            
+            if (Success) {
+                //print out JDialogue that items were received.
+                JOptionPane.showMessageDialog(rootPane, LineCount + " items have been updated under PO " + IDValue);
+                System.out.println("Stuff should have been updated");
+            }
+            
+        }
     }//GEN-LAST:event_ReceiveButtonActionPerformed
 
+    private int CountOrderLines(String IDValue){
+        //System.out.println(IDValue);
+        int LC = 0;
+        try {
+            
+            Query = "SELECT COUNT(*) AS LC "
+                    + "FROM PURCHASE_ORDER_LINE "
+                    + "WHERE PO_ID = " + Integer.parseInt(IDValue) + " AND RECEIVED = FALSE";
+            Result = statement.executeQuery(Query);
+            if (Result.next()){
+            //System.out.println(Result.getInt("LC"));
+            LC = Result.getInt("LC");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Receiving.class.getName()).log(Level.SEVERE, null, ex);
+            Success = false;
+        }
+
+        return LC;
+    }
+    
+    private void UpdateAmounts(String IDValue){
+        Query = "UPDATE STOCK S "
+                    + "SET S.AMOUNT = (S.AMOUNT + "
+                        + "(SELECT P.AMOUNT "
+                        + "FROM PURCHASE_ORDER_LINE P "
+                        + "WHERE P.STOCK_ID = S.STOCK_ID AND P.PO_ID = " + Integer.parseInt(IDValue) + ")), "
+                    + "S.ON_ORDER = (S.ON_ORDER - "
+                        + "(SELECT P.AMOUNT "
+                        + "FROM PURCHASE_ORDER_LINE P "
+                        + "WHERE P.STOCK_ID = S.STOCK_ID AND P.PO_ID = " + Integer.parseInt(IDValue) + ")) "
+                //+ "FROM STOCK S, PURCHASE_ORDER_LINE P "
+                + "WHERE S.STOCK_ID IN ( "
+                        + "SELECT P.STOCK_ID "
+                        + "FROM PURCHASE_ORDER_LINE P "
+                        + "WHERE P.PO_ID = " + Integer.parseInt(IDValue) + ")";
+            
+            try {
+                statement.execute(Query);
+            } catch (SQLException ex) {
+                Logger.getLogger(Receiving.class.getName()).log(Level.SEVERE, null, ex);
+                Success = false;
+                JOptionPane.showMessageDialog(rootPane, "Error in Updating Stock Amounts");
+            }
+    }
+    
+    private void UpdateReceived(String IDValue){
+        // Set all POLines Received to True
+        Query = "UPDATE PURCHASE_ORDER_LINE "
+                + "SET RECEIVED = TRUE "
+                + "WHERE PO_ID = " + Integer.parseInt(IDValue);
+        
+        try {
+            statement.execute(Query);
+        } catch (SQLException ex) {
+            Logger.getLogger(Receiving.class.getName()).log(Level.SEVERE, null, ex);
+            Success = false;
+            JOptionPane.showMessageDialog(rootPane, "Error in updating Received status.");
+        }
+        
+    }
+    
     /**
      * @param args the command line arguments
      */
