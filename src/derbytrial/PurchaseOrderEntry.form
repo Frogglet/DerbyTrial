@@ -177,11 +177,17 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Add Row"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="AddRowButtonActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="ClearRowsButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="Clear Rows"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ClearRowsButtonActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

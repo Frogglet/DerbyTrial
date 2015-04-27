@@ -340,6 +340,14 @@ public class TransactionView extends javax.swing.JFrame {
         if (currentTable != null && currentID != null) {
             try (Statement stmt = conn.createStatement()) {
                 if (currentTable.equals("SALE")) {
+                    stmt.execute("UPDATE STOCK S SET S.AMOUNT = (S.AMOUNT + "
+                            + "(SELECT O.AMOUNT "
+                            + "FROM SALE_ORDER_LINE O "
+                            + "WHERE S.STOCK_ID = O.STOCK_ID AND O.SALE_ID = " + currentID + "))"
+                            + " WHERE S.STOCK_ID IN ("
+                                + "SELECT O.STOCK_ID "
+                                + "FROM SALE_ORDER_LINE O "
+                                + "WHERE SALE_ID = " + currentID + ")");
                     stmt.executeUpdate("delete from SALE_ORDER_LINE where SALE_ID = " + currentID);
                     stmt.executeUpdate("delete from SALE where SALE_ID = " + currentID);
 
@@ -357,6 +365,22 @@ public class TransactionView extends javax.swing.JFrame {
                     currentID = null;
                     conn.commit();
                 } else {
+                    stmt.execute("UPDATE STOCK S SET S.AMOUNT = (S.AMOUNT - "
+                            + "(SELECT P.AMOUNT "
+                            + "FROM PURCHASE_ORDER_LINE P "
+                            + "WHERE S.STOCK_ID = P.STOCK_ID AND P.PO_ID = " + currentID + "))"
+                            + " WHERE S.STOCK_ID IN ("
+                                + "SELECT P.STOCK_ID "
+                                + "FROM PURCHASE_ORDER_LINE P "
+                                + "WHERE P.PO_ID = " + currentID + " AND P.RECEIVED = TRUE)");
+                    stmt.execute("UPDATE STOCK S SET S.ON_ORDER = (S.ON_ORDER - "
+                            + "(SELECT P.AMOUNT "
+                            + "FROM PURCHASE_ORDER_LINE P "
+                            + "WHERE S.STOCK_ID = P.STOCK_ID AND P.PO_ID = " + currentID + "))"
+                            + " WHERE S.STOCK_ID IN ("
+                                + "SELECT P.STOCK_ID "
+                                + "FROM PURCHASE_ORDER_LINE P "
+                                + "WHERE P.PO_ID = " + currentID + " AND P.RECEIVED = FALSE)");
                     stmt.executeUpdate("delete from PURCHASE_ORDER_LINE where PO_ID = " + currentID);
                     stmt.executeUpdate("delete from PURCHASE_ORDER where PO_ID = " + currentID);
 

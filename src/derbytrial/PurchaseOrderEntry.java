@@ -101,8 +101,18 @@ private Connection conn;
         jLabel1.setText("Stock Items (Stock ID, Amount)");
 
         AddRowButton.setText("Add Row");
+        AddRowButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AddRowButtonActionPerformed(evt);
+            }
+        });
 
         ClearRowsButton.setText("Clear Rows");
+        ClearRowsButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ClearRowsButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -211,6 +221,7 @@ private Connection conn;
                 int amount = Integer.parseInt(PurchaseTable.getValueAt(i, 1).toString());
 
                 Statement tempStmt = conn.createStatement();
+                Statement addStatement = conn.createStatement();
                 ResultSet tempRs = tempStmt.executeQuery("select VENDOR_COST from STOCK where STOCK_ID = " + stockID);
 
                 if (!tempRs.next()) {
@@ -230,6 +241,8 @@ private Connection conn;
                 solPrep.setInt(3, amount);
                 solPrep.setBigDecimal(4, price);
 
+                addStatement.execute("UPDATE STOCK SET ON_ORDER = (ON_ORDER + " + amount + ") WHERE STOCK_ID = " + stockID);
+                
                 solPrep.executeUpdate();
             }
 
@@ -272,6 +285,18 @@ private Connection conn;
         // TODO add your handling code here:
         isOpen = false;
     }//GEN-LAST:event_formWindowClosing
+
+    private void AddRowButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddRowButtonActionPerformed
+        // TODO add your handling code here:
+        LineTableModel model = (LineTableModel) PurchaseTable.getModel();
+        model.addRow();
+    }//GEN-LAST:event_AddRowButtonActionPerformed
+
+    private void ClearRowsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ClearRowsButtonActionPerformed
+        // TODO add your handling code here:
+        LineTableModel model = (LineTableModel) PurchaseTable.getModel();
+        model.clearRows();
+    }//GEN-LAST:event_ClearRowsButtonActionPerformed
 
     /**
      * @param args the command line arguments

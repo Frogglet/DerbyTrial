@@ -108,7 +108,7 @@
     </Component>
     <Component class="javax.swing.JButton" name="OrderViewButton">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Order View"/>
+        <Property name="text" type="java.lang.String" value="Transaction View"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="OrderViewButtonActionPerformed"/>

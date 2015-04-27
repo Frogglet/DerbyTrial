@@ -238,6 +238,7 @@ public class SalesOrderEntry extends javax.swing.JFrame {
                 int amount = Integer.parseInt(OrderLineTable.getValueAt(i, 1).toString());
 
                 Statement tempStmt = conn.createStatement();
+                Statement addStatement = conn.createStatement();
                 ResultSet tempRs = tempStmt.executeQuery("select SALE_PRICE from STOCK where STOCK_ID = " + stockID);
 
                 if (!tempRs.next()) {
@@ -257,6 +258,8 @@ public class SalesOrderEntry extends javax.swing.JFrame {
                 solPrep.setInt(3, amount);
                 solPrep.setBigDecimal(4, price);
 
+                addStatement.execute("UPDATE STOCK SET AMOUNT = (AMOUNT - " + amount + ") WHERE STOCK_ID = " + stockID);
+                
                 solPrep.executeUpdate();
             }
 

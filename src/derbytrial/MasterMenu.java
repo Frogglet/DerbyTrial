@@ -85,7 +85,7 @@ public class MasterMenu extends javax.swing.JFrame {
             }
         });
 
-        OrderViewButton.setText("Order View");
+        OrderViewButton.setText("Transaction View");
         OrderViewButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 OrderViewButtonActionPerformed(evt);
